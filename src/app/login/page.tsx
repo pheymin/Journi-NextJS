@@ -44,7 +44,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 			password: formData.get('password'),
 		};
 
-		const res = await fetch('https://journi-next-js.vercel.app/api/auth/signin', {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/signin`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 		const password = formData.get("password") as string;
 		const origin = window.location.origin;
 
-		const res = await fetch('https://journi-next-js.vercel.app/api/auth/signup', {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/signup`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -128,7 +128,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 	const handleLoginWithMagic = async (email: string) => {
 		const origin = window.location.origin;
 
-		const res = await fetch('https://journi-next-js.vercel.app/api/auth/magiclink', {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/magiclink`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
