@@ -128,27 +128,6 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 
 	return (
 		<div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
-			<Link
-				href="/"
-				className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					strokeWidth="2"
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-				>
-					<polyline points="15 18 9 12 15 6" />
-				</svg>{" "}
-				Back
-			</Link>
-
 			<div className="mx-auto w-full max-w-sm">
 				<img className="mx-auto h-28 w-auto rounded-full" src="/android-chrome-192x192.png" alt="logo" />
 				<h2 className="mt-10 mb-5 text-center text-2xl font-bold leading-9 tracking-tigh">
@@ -220,9 +199,9 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 						</Card>
 					</TabsContent>
 				</Tabs>
-				<p className="text-center">{authButtonState ? 'Don\'t have an account?' : 'Already a User?'}
+				<p className="text-center">{!authButtonState ? 'Don\'t have an account?' : 'Already a User?'}
 					<Button onClick={() => setAuthButtonState(!authButtonState)} variant="link">
-						{authButtonState ? 'Sign up' : 'Log in'}
+						{!authButtonState ? 'Sign up' : 'Log in'}
 					</Button>
 				</p>
 			</div>
