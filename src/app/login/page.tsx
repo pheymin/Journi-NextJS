@@ -54,7 +54,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 		});
 
 		if (res.ok) {
-			window.location.href = '/profile';
+			window.location.href = '/dashboard';
 		} else {
 			const { error } = await res.json();
 			toast({
@@ -152,7 +152,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 			<div className="mx-auto w-full max-w-sm">
 				<img className="mx-auto h-28 w-auto rounded-full" src="/android-chrome-192x192.png" alt="logo" />
 				<h2 className="mt-10 mb-5 text-center text-2xl font-bold leading-9 tracking-tigh">
-					{!authButtonState ? 'Register a new account' : 'Sign in to your account'}
+					{authButtonState ? 'Register a new account' : 'Sign in to your account'}
 				</h2>
 				<Tabs defaultValue="account" className="w-[400px] mb-2">
 					<TabsList className="grid w-full grid-cols-2">
@@ -177,11 +177,11 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 								</CardContent>
 								<CardFooter className="flex flex-col space-y-4">
 									<SubmitButton
-										formAction={!authButtonState ? signUp : signIn}
+										formAction={authButtonState ? signUp : signIn}
 										className="border bg-[#baff66] rounded-md px-4 py-2 text-black mb-2 w-full hover:text-[#baff66] hover:bg-[#0c1f19] hover:border-[#baff66]"
-										pendingText={!authButtonState ? 'Signing Up...' : 'Signing In...'}
+										pendingText={authButtonState ? 'Signing Up...' : 'Signing In...'}
 									>
-										{authButtonState ? 'Sign in' : 'Sign up'}
+										{authButtonState ? 'Sign up' : 'Sign in'}
 									</SubmitButton>
 									<div className="divider">or continue with</div>
 									<div className='flex flex-row space-x-2 w-full'>

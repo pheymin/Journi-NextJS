@@ -16,7 +16,11 @@ export async function POST(request: Request) {
     });
 
     if (error) {
-      return NextResponse.json({ error: 'Could not sign up user' }, { status: 400 });
+      console.error(error.message);
+      if (error.message === "User already registered") {
+        return NextResponse.json({ error: 'User already has an account' }, { status: 400 });
+      }
+      return NextResponse.json({ error: 'Could not sign up user, please try again later' }, { status: 400 });
     }
 
     return NextResponse.json({ message: 'Check email to continue sign in process' }, { status: 200 });

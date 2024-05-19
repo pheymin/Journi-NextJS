@@ -25,5 +25,5 @@ export async function GET(request: Request) {
     }
 
     // Redirect to profile page upon successful verification
-    return NextResponse.redirect(`${origin}/profile`);
+    return NextResponse.redirect(`${origin}/dashboard`);
 }
