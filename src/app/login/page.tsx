@@ -23,6 +23,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { createClient } from "@/utils/supabase/client";
 
 export default function Login({ searchParams }: { searchParams: { message: string } }) {
 	const { toast } = useToast();
@@ -89,41 +90,15 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 		}
 	};
 
-	const signInWithGoogle = async () => {
-		// try {
-		// 	const { error } = await supabase.auth.signInWithOAuth({
-		// 		provider: 'google',
-		// 		options: {
-		// 			redirectTo: location.origin + '/profile',
-		// 		},
-		// 	})
-		// 	if (error) throw error
-		// } catch (error: any) {
-		// 	toast({
-		// 		variant: "destructive",
-		// 		title: "Uh oh! Something went wrong.",
-		// 		description: error.error_description || error.message
-		// 	})
-		// }
-	}
-
-	const signInWithFacebook = async () => {
-		// try {
-		// 	const { error } = await supabase.auth.signInWithOAuth({
-		// 		provider: 'facebook',
-		// 		options: {
-		// 			redirectTo: location.origin + '/profile',
-		// 		},
-		// 	})
-		// 	if (error) throw error
-		// } catch (error: any) {
-		// 	toast({
-		// 		variant: "destructive",
-		// 		title: "Uh oh! Something went wrong.",
-		// 		description: error.error_description || error.message
-		// 	})
-		// }
-	}
+	const handleLoginWithOAuth = (provider: "facebook" | "google") => {
+		const supabase = createClient();
+		supabase.auth.signInWithOAuth({
+			provider,
+			options: {
+				redirectTo: location.origin + "/auth/callback",
+			},
+		});
+	};
 
 	const handleLoginWithMagic = async (email: string) => {
 		const origin = window.location.origin;
@@ -210,8 +185,8 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 									</SubmitButton>
 									<div className="divider">or continue with</div>
 									<div className='flex flex-row space-x-2 w-full'>
-										<Button onClick={signInWithGoogle} variant="outline" className="w-full g_id_signin"><FontAwesomeIcon icon={faGoogle} className='mx-2' />Google</Button>
-										<Button onClick={signInWithFacebook} variant="outline" className="w-full"><FontAwesomeIcon icon={faFacebookF} className='mx-2' />Facebook</Button>
+										<Button onClick={() => handleLoginWithOAuth("google")} variant="outline" className="w-full g_id_signin"><FontAwesomeIcon icon={faGoogle} className='mx-2' />Google</Button>
+										<Button onClick={() => handleLoginWithOAuth("facebook")} variant="outline" className="w-full"><FontAwesomeIcon icon={faFacebookF} className='mx-2' />Facebook</Button>
 									</div>
 								</CardFooter>
 							</form>
