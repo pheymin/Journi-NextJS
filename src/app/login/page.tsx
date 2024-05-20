@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from 'react';
-import { SubmitButton } from "./submit-button";
+import { SubmitButton } from "@/components/submit-button";
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import {
@@ -25,19 +25,13 @@ import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { createClient } from "@/utils/supabase/client";
 
-export default function Login({ searchParams }: { searchParams: { message: string } }) {
+export default function Login() {
 	const { toast } = useToast();
 	const [authButtonState, setAuthButtonState] = useState(false);
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [magicEmail, setMagicEmail] = useState<string>('');
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-
-	useEffect(() => {
-		if (searchParams.message) {
-			toast({ description: searchParams.message });
-		}
-	}, [searchParams.message, toast]);
 
 	const signIn = async (formData: FormData) => {
 		const data = {
@@ -148,7 +142,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
 									</div>
 									<div className="space-y-1">
 										<Label htmlFor="password">Password</Label>
-										<Input value={password} type={isOpen ? 'text' : 'password'} name="password" placeholder="••••••••" onChange={(e) => setPassword(e.target.value)} required />
+										<Input value={password} type={isOpen ? 'text' : 'password'} name="password" placeholder="••••••••" onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
 										<span>
 											<FontAwesomeIcon icon={isOpen ? faEye : faEyeSlash} className='relative float-right mt-[-25px] mr-[10px] cursor-pointer' onClick={() => setIsOpen(!isOpen)} />
 										</span>

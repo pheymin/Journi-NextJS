@@ -9,6 +9,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Link from "next/link";
 
 export default async function AuthButton() {
 	const supabase = createClient();
@@ -21,11 +22,6 @@ export default async function AuthButton() {
 		return redirect("/login");
 	};
 
-	const redirectToProfile = async () => {
-		"use server";
-		return redirect("/dashboard");
-	};
-
 	return user ? (
 		<div className="flex items-center gap-4">
 			<DropdownMenu>
@@ -34,7 +30,7 @@ export default async function AuthButton() {
 						{user.user_metadata ? (
 							<img src={user.user_metadata.avatar_url} className="h-full rounded-full" />
 						) : (
-							<img src="https://source.boringavatars.com/marble/120/" className="h-full rounded-full" alt="Default Avatar" />
+							<img src={`https://source.boringavatars.com/marble/120/${user.email}`} className="h-full rounded-full" alt="Default Avatar" />
 						)}
 					</div>
 				</DropdownMenuTrigger>
@@ -45,10 +41,8 @@ export default async function AuthButton() {
 						<p className="text-white">{user.email}</p>
 					)}</DropdownMenuLabel>
 					<DropdownMenuSeparator />
-					<DropdownMenuItem><form action={redirectToProfile}>
-						<button className="no-underline">
-							Profile
-						</button></form>
+					<DropdownMenuItem>
+						<Link href="/dashboard">Profile</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem><form action={signOut}>
 						<button className="no-underline">
