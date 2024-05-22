@@ -1,13 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import NewTripDialog from "./components/NewTripDialog";
-import ToastNotifier from "@/components/ToastNotifier";
 
-export default async function Page({
-	searchParams,
-}: {
-	searchParams: { status?: string; message?: string };
-}) {
+export default async function Page() {
 	const supabase = createClient();
 
 	const {
@@ -20,7 +15,6 @@ export default async function Page({
 
 	return (
 		<>
-			{searchParams.status && searchParams.message && <ToastNotifier message={searchParams.message} shouldReload={true} />}
 			<div className="flex flex-col md:flex-row md:justify-between md:items-center space-y-5">
 				<div className="flex flex-row space-x-4">
 					<p className="text-4xl font-semibold">Dashboard</p>

@@ -37,13 +37,14 @@ export default async function Profile() {
                 <CardHeader>
                     <CardTitle>Profile</CardTitle>
                     <div className="inline-flex items-center justify-center rounded-full h-24 px-1 py-1">
-                        {profileData?.avatar_url ? (
-                            <img src={profileData.avatar_url} className="h-full rounded-full" alt="Profile Avatar" />
-                        ) : user?.user_metadata?.avatar_url ? (
-                            <img src={user.user_metadata.avatar_url} className="h-full rounded-full" alt="User Avatar" />
-                        ) : (
-                            <img src={`https://source.boringavatars.com/marble/120/${user.email}`} className="h-full rounded-full" alt="Default Avatar" />
-                        )}
+                        <img src=
+                            {profileData?.avatar_url ? (
+                                profileData.avatar_url
+                            ) : user?.user_metadata?.avatar_url ? (
+                                user.user_metadata.avatar_url
+                            ) : (
+                                `https://source.boringavatars.com/marble/120/${user.email}`
+                            )} className="object-cover size-24 rounded-full" alt="Avatar" />
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -66,7 +67,7 @@ export default async function Profile() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <EditProfileDialog profileData={profileData} />
+                    <EditProfileDialog profileData={profileData} user={user} />
                 </CardFooter>
             </Card>
         </div>

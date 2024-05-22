@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
+"use client"
 import { redirect } from "next/navigation";
 import {
     Dialog,
@@ -13,37 +13,46 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button";
 import { SubmitButton } from "@/components/submit-button";
+import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
 
-export default async function EditProfileDialog({ profileData }: { profileData: any }) {
-    const supabase = createClient();
-
-    const { data: userData } = await supabase.auth.getUser();
-
-    if (!userData.user) {
+export default function EditProfileDialog({ profileData, user }: { profileData: any, user: any }) {
+    const { toast } = useToast();
+    if (!user) {
         return redirect("/login");
     }
 
-    const user = userData.user;
+    const [avatar, setAvatar] = useState<string>(profileData?.avatar_url || user?.user_metadata?.avatar_url || `https://source.boringavatars.com/marble/120/${user.email}`);
 
     const handleUpdateProfile = async (formData: FormData) => {
-        "use server"
+        const fileInput = document.getElementById("avatar") as HTMLInputElement | null;
 
-        const full_name = formData.get("full-name");
-        const username = formData.get("username");
-        const website = formData.get("website");
-
-        const supa = createClient();
-        const { error } = await supa.from("profiles").update({
-            full_name: full_name,
-            username: username,
-            website: website,
-        }).eq("id", user.id);
-
-        if (error) {
-            return redirect("/dashboard?status=error&message=Error updating profile")
+        if (fileInput && fileInput.files && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            formData.set("avatar", file);
+        }else{
+            formData.delete("avatar");
         }
 
-        return redirect("/dashboard?status=success&message=Profile updated successfully")
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/profiles/${user.id}`, {
+            method: 'PATCH',
+            body: formData,
+        });
+
+        if (res.ok) {
+            toast({
+                title: "Profile updated!",
+                description: "Your profile has been updated successfully.",
+            });
+            window.location.reload();
+        } else {
+            const { error } = await res.json();
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: error,
+            });
+        }
     };
 
     return (
@@ -62,19 +71,41 @@ export default async function EditProfileDialog({ profileData }: { profileData: 
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 gap-4">
                             <div className="col-span-4 flex flex-col justify-center items-center">
-                                {profileData?.avatar_url ? (
-                                    <img src={profileData.avatar_url} className="h-24 w-24 rounded-full" alt="Profile Avatar" />
-                                ) : user?.user_metadata?.avatar_url ? (
-                                    <img src={user.user_metadata.avatar_url} className="h-24 w-24 rounded-full" alt="User Avatar" />
-                                ) : (
-                                    <img src={`https://source.boringavatars.com/marble/120/${user.email}`} className="h-24 w-24 rounded-full" alt="Default Avatar" />
-                                )}
-                                <Button className="text-[#baff66]" variant="link">Change profile photo</Button>
+                                <div className="text-center">
+                                    <label className="label">
+                                        <input
+                                            id="avatar"
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            name="avatar"
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                    setAvatar(URL.createObjectURL(e.target.files[0]));
+                                                }
+                                            }}
+                                        />
+                                        <figure className="relative size-[120px]">
+                                            <img
+                                                src={avatar}
+                                                className="cursor-pointer object-cover size-[120px] box-border rounded-full border-2 border-transparent shadow-md transition-all duration-300 ease-in-out"
+                                                alt="Avatar"
+                                            />
+                                            <figcaption className="cursor-pointer absolute top-0 rounded-full opacity-0 bg-transparent ease-in-out h-full w-full hover:bg-black hover:bg-opacity-50 hover:opacity-100">
+                                                <img
+                                                    src="https://raw.githubusercontent.com/ThiagoLuizNunes/angular-boilerplate/master/src/assets/imgs/camera-white.png"
+                                                    className="mt-[33px] ml-[33px] size-[50px]"
+                                                    alt="Camera Icon"
+                                                />
+                                            </figcaption>
+                                        </figure>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
-                                Name
+                                Display Name
                             </Label>
                             <Input id="name" defaultValue={profileData?.full_name || user.user_metadata?.full_name} className="col-span-3" placeholder="Add name" name="full-name" />
                         </div>
