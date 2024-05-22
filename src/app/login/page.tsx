@@ -143,7 +143,7 @@ export default function Login() {
 										<Label htmlFor="password">Password</Label>
 										<Input value={password} type={isOpen ? 'text' : 'password'} name="password" placeholder="••••••••" onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
 										<span>
-											<FontAwesomeIcon icon={isOpen ? faEye : faEyeSlash} className='relative float-right mt-[-25px] mr-[10px] cursor-pointer' onClick={() => setIsOpen(!isOpen)} />
+											<FontAwesomeIcon icon={isOpen ? faEye : faEyeSlash} className='relative float-right mt-[-25px] mr-[10px] cursor-pointer w-5' onClick={() => setIsOpen(!isOpen)} />
 										</span>
 									</div>
 								</CardContent>
@@ -157,8 +157,8 @@ export default function Login() {
 									</SubmitButton>
 									<div className="divider">or continue with</div>
 									<div className='flex flex-row space-x-2 w-full'>
-										<Button onClick={() => handleLoginWithOAuth("google")} variant="outline" className="w-full g_id_signin"><FontAwesomeIcon icon={faGoogle} className='mx-2' />Google</Button>
-										<Button onClick={() => handleLoginWithOAuth("facebook")} variant="outline" className="w-full"><FontAwesomeIcon icon={faFacebookF} className='mx-2' />Facebook</Button>
+										<Button onClick={() => handleLoginWithOAuth("google")} variant="outline" className="w-full g_id_signin"><FontAwesomeIcon icon={faGoogle} className='mx-2 w-3' />Google</Button>
+										<Button onClick={() => handleLoginWithOAuth("facebook")} variant="outline" className="w-full"><FontAwesomeIcon icon={faFacebookF} className='mx-2 w-3' />Facebook</Button>
 									</div>
 								</CardFooter>
 							</form>

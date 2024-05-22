@@ -17,7 +17,6 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     if (avatarFile) {
       const { data: fileData, error: fileError } = await supabase.storage.from('avatars').upload(`avatar_${uuid}`, avatarFile, {
         upsert: true,
-        cacheControl: '0',
       });
 
       if (fileError) {
