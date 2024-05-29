@@ -5,12 +5,17 @@ import NewTripDialog from "./components/NewTripDialog";
 export default async function Page() {
 	const supabase = createClient();
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
+	const { data: { user } } = await supabase.auth.getUser();
 
 	if (!user) {
 		return redirect("/login");
+	}
+
+	const { data, error } = await supabase.rpc('count_trips', { user_id: user.id });
+
+	if (error) {
+		console.error('Error fetching trip counts:', error);
+		return null;
 	}
 
 	return (
@@ -26,15 +31,15 @@ export default async function Page() {
 						<div className="grid gap-x-8 gap-y-16 text-center grid-cols-3">
 							<div className="mx-auto flex max-w-xs flex-row gap-x-2 items-end">
 								<div className="text-base leading-7">Planning</div>
-								<div className="order-first text-3xl font-semibold tracking-tight sm:text-5xl">5</div>
+								<div className="order-first text-3xl font-semibold tracking-tight sm:text-5xl">{data[0].planning}</div>
 							</div>
 							<div className="mx-auto flex max-w-xs flex-row gap-x-2 items-end">
 								<div className="text-base leading-7">Ongoing</div>
-								<div className="order-first text-3xl font-semibold tracking-tight sm:text-5xl">5</div>
+								<div className="order-first text-3xl font-semibold tracking-tight sm:text-5xl">{data[0].ongoing}</div>
 							</div>
 							<div className="mx-auto flex max-w-xs flex-row gap-x-2 items-end">
 								<div className="text-base leading-7">Finished</div>
-								<div className="order-first text-3xl font-semibold tracking-tight sm:text-5xl">5</div>
+								<div className="order-first text-3xl font-semibold tracking-tight sm:text-5xl">{data[0].finished}</div>
 							</div>
 						</div>
 					</div>

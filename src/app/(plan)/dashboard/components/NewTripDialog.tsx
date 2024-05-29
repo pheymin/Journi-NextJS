@@ -315,14 +315,6 @@ export default function NewTripDialog() {
                                                                 !field.value && "text-muted-foreground"
                                                             )}
                                                         >
-                                                            {/* {field.value ? (
-                                                                <>
-                                                                    {format(field.value.from, "LLL dd, y")} -{" "}
-                                                                    {format(field.value.to, "LLL dd, y")}
-                                                                </>
-                                                            ) : (
-                                                                <span>Pick a date</span>
-                                                            )} */}
                                                             {field.value?.from ? (
                                                                 field.value?.to ? (
                                                                     <>

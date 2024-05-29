@@ -107,7 +107,7 @@ export default function EditProfileDialog({ profileData, user }: { profileData: 
                             <Label htmlFor="name" className="text-right">
                                 Display Name
                             </Label>
-                            <Input id="name" defaultValue={profileData?.full_name || user.user_metadata?.full_name} className="col-span-3" placeholder="Add name" name="full-name" />
+                            <Input id="name" defaultValue={profileData?.full_name || user.user_metadata?.full_name} className="col-span-3" placeholder="Add name" name="full_name" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="username" className="text-right">
