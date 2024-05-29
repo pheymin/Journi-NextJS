@@ -44,11 +44,10 @@ import { CalendarIcon } from "@radix-ui/react-icons"
 import { addDays, format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
-import { DateRange } from "react-day-picker"
 
 const typesSchema = z.object({
     label: z.string(),
-    value: z.number().int(),
+    value: z.string(),
     disable: z.boolean().optional(),
 });
 
@@ -223,7 +222,7 @@ export default function NewTripDialog() {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/place_categories`);
                 const data = await response.json();
                 const options = data.map((category: any) => ({
-                    value: category.place_categories_id,
+                    value: String(category.place_categories_id),
                     label: category.name,
                 }));
                 setPlaceCategories(options);
@@ -234,11 +233,6 @@ export default function NewTripDialog() {
 
         fetchPlaceCategories();
     }, []);
-
-    const [date, setDate] = useState<DateRange | undefined>({
-        from: new Date(),
-        to: addDays(new Date(), 5),
-    })
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
