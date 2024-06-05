@@ -1,17 +1,24 @@
-import Main from './components/main';
+import Header from './components/Header';
+import Sidebar from '@/components/Sidebar';
+
 export default function Layout({
     children,
+    params
 }: {
     children: React.ReactNode;
+    params: { id: string };
 }) {
     return (
-        <div className="flex flex-col w-full">
-            {children}
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-1">
-                    <Main />
+        <div className="flex flex-col w-full min-h-screen">
+            <Header tripId={params.id} />
+            <div className="flex flex-grow">
+                <div className="flex">
+                    <Sidebar />
                 </div>
-                <div className="md:col-start-2 md:col-span-1">
+                <div className="flex-grow">
+                    {children}
+                </div>
+                <div className="hidden md:block w-1/2">
                     map
                 </div>
             </div>

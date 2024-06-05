@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     try {
         const emailPromises = recipients.map(async (email) => {
             const { data, error } = await resend.emails.send({
-                from: 'Journi <onboarding@resend.dev>',
+                from: 'Journi <noreply@journi.cloud>',
                 to: email,
                 subject: 'You are invited to a trip!',
                 react: EmailTemplate({ sender, title, redirectUrl: emailRedirectTo }),

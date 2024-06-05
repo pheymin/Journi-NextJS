@@ -75,8 +75,8 @@ export default function TripDetails(tripData: any) {
         if (selectedDate?.from && selectedDate?.to) {
             const updatedTrip = {
                 ...trip,
-                start_date: selectedDate.from.toISOString(),
-                end_date: selectedDate.to.toISOString(),
+                start_date: format(selectedDate.from, "yyyy-MM-dd"),
+                end_date: format(selectedDate.to, "yyyy-MM-dd"),
             };
             setTrip(updatedTrip);
             updateTrip(updatedTrip);
@@ -87,7 +87,7 @@ export default function TripDetails(tripData: any) {
         <>
             <Input
                 className="text-center font-semibold text-4xl px-2 py-1 border-none hover:border"
-                placeholder="title"
+                placeholder="Title"
                 defaultValue={trip.title}
                 onChange={(e) => setTrip({ ...trip, title: e.target.value })}
                 onBlur={() => updateTrip(trip)}
@@ -98,7 +98,7 @@ export default function TripDetails(tripData: any) {
                         id="date"
                         variant={"outline"}
                         className={cn(
-                            "w-[300px] justify-start text-left font-normal bg-transparent border-none hover:border-none",
+                            "justify-start w-fit text-left font-normal bg-transparent border-none hover:border-none",
                             !date && "text-muted-foreground"
                         )}
                     >
