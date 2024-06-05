@@ -124,6 +124,9 @@ export default function NewTripDialog() {
                 title: 'Trip created',
                 description: 'Your trip has been successfully created.',
             });
+
+            window.location.href = `/trips/${tripData[0].trip_id}`;
+
         } catch (error) {
             console.error('Error:', error);
             toast({

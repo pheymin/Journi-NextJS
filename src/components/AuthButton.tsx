@@ -52,11 +52,13 @@ export default async function AuthButton() {
 					<DropdownMenuItem>
 						<Link href="/dashboard">Profile</Link>
 					</DropdownMenuItem>
-					<DropdownMenuItem><form action={signOut}>
-						<button className="no-underline">
-							Logout
-						</button>
-					</form></DropdownMenuItem>
+					<DropdownMenuItem>
+						<form action={signOut}>
+							<button className="no-underline">
+								Logout
+							</button>
+						</form>
+					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
 		</div>

@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import { createClient } from "@/utils/supabase/client";
+import { supabaseBrowser } from "@/utils/supabase/client";
 
 export default function Login() {
 	const { toast } = useToast();
@@ -65,7 +65,11 @@ export default function Login() {
 		});
 
 		if (res.ok) {
-			window.location.href = '/login';
+			toast({
+				title: 'Check email to continue sign in process',
+			});
+			const { message } = await res.json();
+			console.log(message);
 		} else {
 			const { error } = await res.json();
 			toast({
@@ -77,7 +81,7 @@ export default function Login() {
 	};
 
 	const handleLoginWithOAuth = (provider: "facebook" | "google") => {
-		const supabase = createClient();
+		const supabase = supabaseBrowser();
 		supabase.auth.signInWithOAuth({
 			provider,
 			options: {

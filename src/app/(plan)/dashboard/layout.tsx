@@ -8,7 +8,7 @@ export default function Layout({
     profile: React.ReactNode;
 }) {
     return (
-        <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="my-10 max-w-5xl md:max-w-6xl grid grid-cols-1 md:grid-cols-4 gap-4 h-fit">
             <div className="md:col-start-2 md:col-span-3">
                 {children}
             </div>

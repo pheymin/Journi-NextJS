@@ -20,10 +20,9 @@ export async function GET(request: Request) {
             try {
                 const placeDetailsResponse = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${plan.place_id}&fields=photo&key=${process.env.NEXT_PUBLIC_MAPS_API_KEY}`);
                 const placeDetails = await placeDetailsResponse.json();
-                console.log('placeDetails:', placeDetails);
+
                 if (placeDetails.result && placeDetails.result.photos && placeDetails.result.photos.length > 0) {
                     const photoReference = placeDetails.result.photos[0].photo_reference;
-                    console.log('photoReference:', photoReference);
                     plan.image = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.NEXT_PUBLIC_MAPS_API_KEY}`;
                 } else {
                     plan.image = null; // Or set a default image URL
