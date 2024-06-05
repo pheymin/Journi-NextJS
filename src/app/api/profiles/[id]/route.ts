@@ -28,10 +28,10 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 			avatar_url = data.publicUrl;
 		}
 
-		const updateData: { full_name: FormDataEntryValue | null, username: FormDataEntryValue | null, website: FormDataEntryValue | null, avatar_url?: string | null } = {
-			full_name,
-			username,
-			website,
+		const updateData: { full_name: string, username: string, website: string, avatar_url?: string } = {
+			full_name: full_name as string,
+			username: username as string,
+			website: website as string,
 		};
 
 		if (avatar_url) {
