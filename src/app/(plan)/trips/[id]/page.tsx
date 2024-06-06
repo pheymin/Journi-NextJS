@@ -5,7 +5,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <div>
-            
+            <h1>Overview</h1>
         </div>
     );
 }

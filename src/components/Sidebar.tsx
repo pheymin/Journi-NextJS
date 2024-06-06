@@ -2,32 +2,60 @@
 
 import { useState, useEffect } from "react";
 import { Nav } from "@/components/ui/nav";
-
 import {
   LayoutDashboard,
   ChevronRight,
   Route,
   Vote,
   AudioLines,
-  CircleDollarSign
+  CircleDollarSign,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { supabaseBrowser } from "@/utils/supabase/client";
+import { format } from "date-fns"
 
-type Props = {};
+type Props = {
+  trip_id: string;
+};
 
-export default function Sidebar({}: Props) {
+interface Itinerary {
+  itinerary_id: number;
+  trip_id: number;
+  itinerary_date: Date;
+  subheading: string | null;
+  created_at: string;
+}
+
+export default function Sidebar({trip_id}: Props) {
+  const supabase = supabaseBrowser();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileWidth, setMobileWidth] = useState(false);
-  const [pathName, setPathName] = useState("");
+  const [itinerary, setItinerary] = useState<Itinerary[]>([]);
 
   const handleResize = () => {
     setMobileWidth(window.innerWidth < 768);
   };
 
+  const fetchItinerary = async () => {
+    const { data, error } = await supabase
+      .from("itinerary")
+      .select("*")
+      .eq("trip_id", trip_id);
+
+    if (error) {
+      console.error("Error fetching itinerary", error);
+    }
+
+    console.log("Itinerary", data);
+    setItinerary(data ?? []); 
+  };
+
+  useEffect(() => {
+    fetchItinerary();
+  }, [trip_id]);
+
   useEffect(() => {
     handleResize();
-
-    setPathName(window.location.pathname);
 
     window.addEventListener("resize", handleResize);
 
@@ -40,14 +68,16 @@ export default function Sidebar({}: Props) {
     setIsCollapsed(!isCollapsed);
   }
 
+  const baseRoute = `/trips/${trip_id}`;
+
   return (
-    <div className="relative min-w-[80px] border-r px-3  pb-10 pt-24 ">
+    <div className="relative min-w-[80px] border-r px-3 pb-10">
       {!mobileWidth && (
-        <div className="absolute right-[-20px] top-7">
+        <div className="absolute right-[-20px] top-12">
           <Button
             onClick={toggleSidebar}
             variant="secondary"
-            className=" rounded-full p-2"
+            className="rounded-full p-2"
           >
             <ChevronRight />
           </Button>
@@ -58,31 +88,48 @@ export default function Sidebar({}: Props) {
         links={[
           {
             title: "Overview",
-            href: "",
+            href: `${baseRoute}`,
             icon: LayoutDashboard,
-            variant: "default"
+            variant: "ghost"
           },
           {
             title: "Itinerary",
-            href: `${pathName}/itinerary`,
+            href: `${baseRoute}/itinerary`,
             icon: Route,
-            variant: "ghost"
+            variant: "ghost",
+            children: itinerary.map((item) => ({
+              title: format(item.itinerary_date, "LLL dd, y"),
+              href: `${baseRoute}/itinerary#${item.itinerary_id}`,
+              variant: "ghost",
+            })),
           },
           {
             title: "Polls",
-            href: `${pathName}/polls`,
+            href: `${baseRoute}/polls`,
             icon: Vote,
-            variant: "ghost"
+            variant: "ghost",
+            children: [
+              {
+                title: "Active",
+                href: `${baseRoute}/polls#active`,
+                variant: "default"
+              },
+              {
+                title: "Closed",
+                href: `${baseRoute}/polls#closed`,
+                variant: "ghost"
+              }
+            ]
           },
           {
             title: "Broadcast",
-            href: `${pathName}/broadcast`,
+            href: `${baseRoute}/broadcast`,
             icon: AudioLines,
             variant: "ghost"
           },
           {
             title: "Budget",
-            href: `${pathName}/budget`,
+            href: `${baseRoute}/budget`,
             icon: CircleDollarSign,
             variant: "ghost"
           }

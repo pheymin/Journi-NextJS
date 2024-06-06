@@ -13,9 +13,9 @@ export default function Layout({
             <Header tripId={params.id} />
             <div className="flex flex-grow">
                 <div className="flex">
-                    <Sidebar />
+                    <Sidebar trip_id={params.id}/>
                 </div>
-                <div className="flex-grow">
+                <div className="flex-grow ps-8 p-4">
                     {children}
                 </div>
                 <div className="hidden md:block w-1/2">

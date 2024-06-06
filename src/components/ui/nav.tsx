@@ -12,6 +12,12 @@ import {
 } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { usePathname } from "next/navigation";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 interface NavProps {
   isCollapsed: boolean;
@@ -21,6 +27,11 @@ interface NavProps {
     icon: LucideIcon;
     variant: "default" | "ghost";
     href: string;
+    children?: {
+      title: string;
+      href: string;
+      variant: "default" | "ghost";
+    }[];
   }[];
 }
 
@@ -66,34 +77,89 @@ export function Nav({ links, isCollapsed }: NavProps) {
                 </TooltipContent>
               </Tooltip>
             ) : (
-              <Link
-                key={index}
-                href={link.href}
-                className={cn(
-                  buttonVariants({
-                    variant: link.href === pathName ? "default" : "ghost",
-                    size: "sm"
-                  }),
-                  link.variant === "default" &&
-                  "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                  "justify-start"
-                )}
-              >
-                <link.icon className="mr-2 h-4 w-4" />
-                {link.title}
-                {link.label && (
-                  <span
-                    className={cn(
-                      "ml-auto",
-                      link.variant === "default" &&
-                      "text-background dark:text-white"
-                    )}
-                  >
-                    {link.label}
-                  </span>
-                )}
-              </Link>
-            )
+              link.children ? (
+                <Accordion collapsible type="single">
+                  <AccordionItem value={link.href}>
+                    <AccordionTrigger className="py-2">
+                      <Link
+                        href={link.href}
+                        className={cn(
+                          buttonVariants({
+                            variant: link.href === pathName ? "default" : "ghost",
+                            size: "lg"
+                          }),
+                          link.variant === "default" &&
+                          "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                          "justify-start no-underline"
+                        )}
+                      >
+                        <link.icon className="mr-2 h-4 w-4" />
+                        {link.title}
+                        {link.label && (
+                          <span
+                            className={cn(
+                              "ml-auto",
+                              link.variant === "default" &&
+                              "text-background dark:text-white"
+                            )}
+                          >
+                            {link.label}
+                          </span>
+                        )}
+                      </Link>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <nav className="grid gap-1 px-2">
+                        {link.children.map((children, index) => (
+                          <Link
+                            key={index}
+                            href={children.href}
+                            className={cn(
+                              buttonVariants({
+                                variant: children.href === pathName ? "default" : "ghost",
+                                size: "sm"
+                              }),
+                              "pl-6",
+                              children.variant === "default" &&
+                              "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white"
+                            )}
+                          >
+                            {children.title}
+                          </Link>
+                        ))}
+                      </nav>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              ) : (
+                <Link
+                  key={index}
+                  href={link.href}
+                  className={cn(
+                    buttonVariants({
+                      variant: link.href === pathName ? "default" : "ghost",
+                      size: "lg"
+                    }),
+                    link.variant === "default" &&
+                    "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                    "justify-start"
+                  )}
+                >
+                  <link.icon className="mr-2 h-4 w-4" />
+                  {link.title}
+                  {link.label && (
+                    <span
+                      className={cn(
+                        "ml-auto",
+                        link.variant === "default" &&
+                        "text-background dark:text-white"
+                      )}
+                    >
+                      {link.label}
+                    </span>
+                  )}
+                </Link>
+              ))
           )}
         </nav>
       </div>
