@@ -78,7 +78,7 @@ export default function EditProfileDialog({ profileData, user }: { profileData: 
                         Make changes to your profile here. Click save when you're done.
                     </DialogDescription>
                 </DialogHeader>
-                <ProfileForm className="px-6 flex-flex-col" profileData={profileData} user={user} />
+                <ProfileForm className="px-6 flex flex-col" profileData={profileData} user={user} />
             </DialogContent>
         </Dialog>
     )
@@ -87,7 +87,7 @@ export default function EditProfileDialog({ profileData, user }: { profileData: 
 type ProfileFormProps = React.ComponentProps<"form"> & { profileData: any, user: any };
 
 function ProfileForm({ className, profileData, user }: ProfileFormProps) {
-    const { toast } = useToast();
+    const { toast } = useToast()
     const [avatar, setAvatar] = useState<string>(profileData?.avatar_url || user?.user_metadata?.avatar_url || `https://source.boringavatars.com/marble/120/${user.email}`);
 
     const handleUpdateProfile = async (formData: FormData) => {

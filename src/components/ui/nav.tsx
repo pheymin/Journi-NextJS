@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { LucideIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -17,7 +16,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 
 interface NavProps {
   isCollapsed: boolean;
@@ -78,7 +77,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
               </Tooltip>
             ) : (
               link.children ? (
-                <Accordion collapsible type="single">
+                <Accordion key={index} collapsible type="single">
                   <AccordionItem value={link.href}>
                     <AccordionTrigger className="py-2">
                       <Link
@@ -90,7 +89,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
                           }),
                           link.variant === "default" &&
                           "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                          "justify-start no-underline"
+                          "justify-start no-underline flex items-center"
                         )}
                       >
                         <link.icon className="mr-2 h-4 w-4" />
@@ -110,21 +109,21 @@ export function Nav({ links, isCollapsed }: NavProps) {
                     </AccordionTrigger>
                     <AccordionContent>
                       <nav className="grid gap-1 px-2">
-                        {link.children.map((children, index) => (
+                        {link.children.map((child, childIndex) => (
                           <Link
-                            key={index}
-                            href={children.href}
+                            key={childIndex}
+                            href={child.href}
                             className={cn(
                               buttonVariants({
-                                variant: children.href === pathName ? "default" : "ghost",
+                                variant: child.href === pathName ? "default" : "ghost",
                                 size: "sm"
                               }),
-                              "pl-6",
-                              children.variant === "default" &&
+                              "pl-10 justify-start",
+                              child.variant === "default" &&
                               "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white"
                             )}
                           >
-                            {children.title}
+                            {child.title}
                           </Link>
                         ))}
                       </nav>
@@ -142,7 +141,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
                     }),
                     link.variant === "default" &&
                     "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                    "justify-start"
+                    "justify-start flex items-center"
                   )}
                 >
                   <link.icon className="mr-2 h-4 w-4" />
@@ -159,7 +158,8 @@ export function Nav({ links, isCollapsed }: NavProps) {
                     </span>
                   )}
                 </Link>
-              ))
+              )
+            )
           )}
         </nav>
       </div>

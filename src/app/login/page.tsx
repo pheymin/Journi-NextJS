@@ -69,7 +69,6 @@ export default function Login() {
 				title: 'Check email to continue sign in process',
 			});
 			const { message } = await res.json();
-			console.log(message);
 		} else {
 			const { error } = await res.json();
 			toast({

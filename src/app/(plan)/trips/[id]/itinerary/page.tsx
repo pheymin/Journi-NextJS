@@ -5,7 +5,25 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <div>
-            <h1>Itinerary</h1>
+            <h1>Polls</h1>
+            <ActivePolls />
+            <ClosedPolls />
+        </div>
+    );
+}
+
+function ActivePolls() {
+    return (
+        <div>
+            <h1>Active Polls</h1>
+        </div>
+    );
+}
+
+function ClosedPolls() {
+    return (
+        <div>
+            <h1>Closed Polls</h1>
         </div>
     );
 }

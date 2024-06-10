@@ -13,6 +13,7 @@ import {
 import { Button } from "./ui/button";
 import { supabaseBrowser } from "@/utils/supabase/client";
 import { format } from "date-fns"
+import { it } from "node:test";
 
 type Props = {
   trip_id: string;
@@ -26,11 +27,19 @@ interface Itinerary {
   created_at: string;
 }
 
+interface Section {
+  section_id: number;
+  trip_id: number;
+  title: string;
+  created_at: string;
+}
+
 export default function Sidebar({trip_id}: Props) {
   const supabase = supabaseBrowser();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileWidth, setMobileWidth] = useState(false);
   const [itinerary, setItinerary] = useState<Itinerary[]>([]);
+  const [sections, setSections] = useState<Section[]>([]);
 
   const handleResize = () => {
     setMobileWidth(window.innerWidth < 768);
@@ -46,12 +55,25 @@ export default function Sidebar({trip_id}: Props) {
       console.error("Error fetching itinerary", error);
     }
 
-    console.log("Itinerary", data);
     setItinerary(data ?? []); 
   };
 
+  const fetchSections = async () => {
+    const { data, error } = await supabase
+      .from("section")
+      .select("*")
+      .eq("trip_id", trip_id);
+
+    if (error) {
+      console.error("Error fetching sections", error);
+    }
+
+    setSections(data ?? []);
+  }
+
   useEffect(() => {
     fetchItinerary();
+    fetchSections();
   }, [trip_id]);
 
   useEffect(() => {
@@ -90,7 +112,12 @@ export default function Sidebar({trip_id}: Props) {
             title: "Overview",
             href: `${baseRoute}`,
             icon: LayoutDashboard,
-            variant: "ghost"
+            variant: "ghost",
+            children: sections.map((item) => ({
+              title: item.title,
+              href: `${baseRoute}#${item.section_id}`,
+              variant: "ghost",
+            })),
           },
           {
             title: "Itinerary",

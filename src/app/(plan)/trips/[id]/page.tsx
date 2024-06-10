@@ -1,11 +1,14 @@
-import { createClient } from "@/utils/supabase/server";
+import ParticipantsCard from "./components/ParticipantsCard";
+import BudgetCard from "./components/BudgetCard";
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const supabase = createClient();
 
     return (
         <div>
-            <h1>Overview</h1>
+            <div className="flex flex-row gap-2 w-full">
+                <ParticipantsCard trip_id={params.id} />
+                <BudgetCard trip_id={params.id} />
+            </div>
         </div>
     );
 }

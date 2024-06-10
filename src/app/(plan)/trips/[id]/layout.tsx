@@ -18,9 +18,6 @@ export default function Layout({
                 <div className="flex-grow ps-8 p-4">
                     {children}
                 </div>
-                <div className="hidden md:block w-1/2">
-                    map
-                </div>
             </div>
         </div>
     );
