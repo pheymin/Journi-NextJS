@@ -2,7 +2,6 @@
 import { supabaseBrowser } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import React, { useState, useEffect } from "react";
-import { Schema } from "zod";
 
 type PollOptionsProps = {
     poll_id: number;
@@ -12,18 +11,39 @@ type PollOptionsProps = {
 export default function PollOptions({ poll_id, user_id }: PollOptionsProps) {
     const supabase = supabaseBrowser();
     const [data, setData] = useState<any[] | null>(null);
+    const [userVotes, setUserVotes] = useState<{ [key: number]: boolean }>({});
 
     const fetchPolls = async () => {
         const { data, error } = await supabase
             .from("poll_answer")
-            .select(`*,
-             poll_vote(count)`)
+            .select(`
+                *,
+                poll_vote(count)
+            `)
             .eq("poll_id", poll_id);
 
         if (error) {
             console.error("Error fetching polls", error);
+            return;
         }
 
+        const userVoteStatus: { [key: number]: boolean } = {};
+
+        for (const answer of data) {
+            const userVote = await supabase
+                .from("poll_vote")
+                .select("user_id")
+                .eq("poll_answer_id", answer.poll_answer_id)
+                .eq("user_id", user_id);
+
+            if (userVote.data && userVote.data.length > 0) {
+                userVoteStatus[answer.poll_answer_id] = true;
+            } else {
+                userVoteStatus[answer.poll_answer_id] = false;
+            }
+        }
+
+        setUserVotes(userVoteStatus);
         setData(data);
     };
 
@@ -32,7 +52,7 @@ export default function PollOptions({ poll_id, user_id }: PollOptionsProps) {
 
         const subscription = supabase
             .channel(`poll_answer:${poll_id}`)
-            .on('postgres_changes',{
+            .on('postgres_changes', {
                 event: '*',
                 schema: 'public',
                 table: 'poll_vote',
@@ -57,8 +77,11 @@ export default function PollOptions({ poll_id, user_id }: PollOptionsProps) {
 
             if (error) {
                 console.error("Error inserting vote", error);
+                return;
             }
-        }
+
+            fetchPolls();
+        };
 
         insertVote();
     };
@@ -66,11 +89,15 @@ export default function PollOptions({ poll_id, user_id }: PollOptionsProps) {
     return (
         <div className="grid justify-items-stretch space-y-2">
             {data?.map((answer: any, index: number) => (
-                <div key={index} className="grid gap-2">
-                    <Button variant="outline" className="text-left flex-grow" onClick={() => updateVote(answer.poll_answer_id)}>
+                <div key={answer.poll_answer_id} className="grid gap-2">
+                    <Button 
+                        variant="outline"
+                        className={`text-left flex-grow ${userVotes[answer.poll_answer_id] ? "border-2 text-[#baff66] border-[#baff66] bg-[#0c1f19]" : ""}`}
+                        onClick={() => updateVote(answer.poll_answer_id)}
+                    >
                         {answer.answer}
                     </Button>
-                    <p className="justify-self-end">{answer.poll_vote[0].count} votes</p>
+                    <p className="justify-self-end">{answer.poll_vote?.[0]?.count || 0} votes</p>
                 </div>
             ))}
         </div>

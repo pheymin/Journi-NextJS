@@ -3,12 +3,8 @@ import { Button } from "@/components/ui/button";
 import AddPollDialog from "./components/AddPollDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import PollOptions from "./components/PollOptions";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
+import VoteRanking from "./components/VoteRanking";
+import { format } from 'date-fns';
 
 export default async function Page({ params }: { params: { id: string } }) {
     return (
@@ -70,9 +66,12 @@ async function ActivePolls({ trip_id }: { trip_id: string }) {
                                                 )} alt="Avatar" />
                                             <AvatarFallback>JN</AvatarFallback>
                                         </Avatar>
-                                        <p className="text-sm text-muted-foreground ">Created by {poll.profiles?.username
-                                            ? poll.profiles.username
-                                            : poll.profiles.email}</p>
+                                        <div>
+                                            <p className="text-sm">{poll.profiles?.username
+                                                ? poll.profiles.username
+                                                : poll.profiles.email}</p>
+                                            <p className="text-muted-foreground text-xs">{format(new Date(poll.created_at), 'PPpp')}</p>
+                                        </div>
                                     </div>
                                     <h3 className="font-semibold text-xl">{poll.question}</h3>
                                     <hr />
@@ -85,76 +84,11 @@ async function ActivePolls({ trip_id }: { trip_id: string }) {
                                     <Button variant="secondary" className="col-span-4 md:col-span-1 md:col-start-4">Close Poll</Button>
                                 }
                             </div>
-                            <VoteRanking poll_id={poll.poll_id} />
+                            <VoteRanking poll_id={poll.poll_id} trip_id={trip_id} />
                         </div>
                     ))}
                 </div>
             )}
-        </div>
-    );
-}
-
-async function VoteRanking({ poll_id }: { poll_id: number }) {
-    const supabase = createClient();
-    const { data, error } = await supabase
-        .from("poll_answer")
-        .select(`*,poll_vote(count)`)
-        .eq("poll_id", poll_id);
-
-    if (!data) {
-        return <div>No data available</div>;
-    }
-
-    return (
-        <div className="space-y-2">
-            {data?.map((answer: any, index: number) => (
-                <div key={index} className="grid gap-2">
-                    <h3>Rank {index + 1}</h3>
-                    <hr />
-                    <h3>{answer.answer}</h3>
-                    <VotedUsers poll_answer_id={answer.poll_answer_id} />
-                    <p className="justify-self-end">{answer.poll_vote[0].count} votes</p>
-                </div>
-            ))}
-        </div>
-    );
-}
-
-async function VotedUsers({ poll_answer_id }: { poll_answer_id: number }) {
-    const supabase = createClient();
-    const { data, error } = await supabase
-        .from("poll_vote")
-        .select(`*, profiles(*)`)
-        .eq("poll_answer_id", poll_answer_id);
-
-    if (!data) {
-        return <div>No data available</div>;
-    }
-
-    return (
-        <div className="space-x-2">
-            {data?.map((vote: any, index: number) => (
-                <TooltipProvider key={index}>
-                    <Tooltip>
-                        <TooltipTrigger>
-                            <Avatar className="size-8">
-                                <AvatarImage src=
-                                    {vote.profiles?.avatar_url ? (
-                                        vote.profiles.avatar_url
-                                    ) : (
-                                        `https://source.boringavatars.com/marble/120/${vote.profiles.email}`
-                                    )} alt="Avatar" />
-                                <AvatarFallback>JN</AvatarFallback>
-                            </Avatar>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <div className="grid gap-2">
-                                <p>{vote.profiles?.username ? vote.profiles.username : vote.profiles.email}</p>
-                            </div>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-            ))}
         </div>
     );
 }
