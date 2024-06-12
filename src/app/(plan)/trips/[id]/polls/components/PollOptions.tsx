@@ -6,9 +6,10 @@ import React, { useState, useEffect } from "react";
 type PollOptionsProps = {
     poll_id: number;
     user_id: string;
+    status: boolean;
 };
 
-export default function PollOptions({ poll_id, user_id }: PollOptionsProps) {
+export default function PollOptions({ poll_id, user_id, status }: PollOptionsProps) {
     const supabase = supabaseBrowser();
     const [data, setData] = useState<any[] | null>(null);
     const [userVotes, setUserVotes] = useState<{ [key: number]: boolean }>({});
@@ -94,6 +95,7 @@ export default function PollOptions({ poll_id, user_id }: PollOptionsProps) {
                         variant="outline"
                         className={`text-left flex-grow ${userVotes[answer.poll_answer_id] ? "border-2 text-[#baff66] border-[#baff66] bg-[#0c1f19]" : ""}`}
                         onClick={() => updateVote(answer.poll_answer_id)}
+                        disabled={!status || userVotes[answer.poll_answer_id]}
                     >
                         {answer.answer}
                     </Button>

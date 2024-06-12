@@ -1,12 +1,26 @@
 import { createClient } from "@/utils/supabase/server";
-import { Button } from "@/components/ui/button";
 import AddPollDialog from "./components/AddPollDialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import PollOptions from "./components/PollOptions";
-import VoteRanking from "./components/VoteRanking";
-import { format } from 'date-fns';
+import PollCard from "./components/PollCard";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
 
 export default async function Page({ params }: { params: { id: string } }) {
+    const supabase = createClient();
+
+    const { count: activeCount, error } = await supabase
+        .from("polls")
+        .select('*', { count: 'exact', head: true })
+        .eq("status", "Active");
+
+    const { count: closedCount, error: closedError } = await supabase
+        .from("polls")
+        .select('*', { count: 'exact', head: true })
+        .eq("status", "Closed");
+
     return (
         <div>
             <div className="w-full h-full space-y-3">
@@ -15,9 +29,22 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <p className="text-sm text-muted-foreground">Create a poll to help your group narrow down options or answer key questions.</p>
                 </div>
                 <hr />
-                <ActivePolls trip_id={params.id} />
-                <hr />
-                <ClosedPolls />
+                <Accordion type="single" collapsible defaultValue="item-1">
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger>Active Polls ({activeCount})</AccordionTrigger>
+                        <AccordionContent>
+                            <ActivePolls trip_id={params.id} />
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+                <Accordion type="single" collapsible defaultValue="item-2">
+                    <AccordionItem value="item-2">
+                        <AccordionTrigger>Closed Polls ({closedCount})</AccordionTrigger>
+                        <AccordionContent>
+                            <ClosedPolls trip_id={params.id} />
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </div>
         </div>
     );
@@ -42,7 +69,6 @@ async function ActivePolls({ trip_id }: { trip_id: string }) {
     return (
         <div id="active">
             <div className="flex justify-between">
-                <h1>Active Polls ({activePolls})</h1>
                 <AddPollDialog trip_id={trip_id} user={user} />
             </div>
             {activePolls === 0 ? (
@@ -53,39 +79,7 @@ async function ActivePolls({ trip_id }: { trip_id: string }) {
             ) : (
                 <div className="space-y-4">
                     {data?.map((poll: any, index: number) => (
-                        <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 rounded-xl p-4 border-2 space-y-3">
-                                <div className="space-y-3 col-span-4">
-                                    <div className="flex items-center space-x-2">
-                                        <Avatar className="size-8">
-                                            <AvatarImage src=
-                                                {poll.profiles?.avatar_url ? (
-                                                    poll.profiles.avatar_url
-                                                ) : (
-                                                    `https://source.boringavatars.com/marble/120/${poll.profiles.email}`
-                                                )} alt="Avatar" />
-                                            <AvatarFallback>JN</AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                            <p className="text-sm">{poll.profiles?.username
-                                                ? poll.profiles.username
-                                                : poll.profiles.email}</p>
-                                            <p className="text-muted-foreground text-xs">{format(new Date(poll.created_at), 'PPpp')}</p>
-                                        </div>
-                                    </div>
-                                    <h3 className="font-semibold text-xl">{poll.question}</h3>
-                                    <hr />
-                                    <div>
-                                        <p className="text-sm text-muted-foreground mb-3">Select your answer below</p>
-                                        <PollOptions poll_id={poll.poll_id} user_id={user.id} />
-                                    </div>
-                                </div>
-                                {user.id == poll.profiles.id &&
-                                    <Button variant="secondary" className="col-span-4 md:col-span-1 md:col-start-4">Close Poll</Button>
-                                }
-                            </div>
-                            <VoteRanking poll_id={poll.poll_id} trip_id={trip_id} />
-                        </div>
+                        <PollCard poll={poll} user={user} trip_id={trip_id} isOwner={user.id == poll.profiles.id} key={index} />
                     ))}
                 </div>
             )}
@@ -93,18 +87,36 @@ async function ActivePolls({ trip_id }: { trip_id: string }) {
     );
 }
 
-async function ClosedPolls() {
+async function ClosedPolls({ trip_id }: { trip_id: string }) {
     const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        console.error("User not authenticated");
+        return;
+    }
+
     const { data, error } = await supabase
         .from("polls")
-        .select("*")
+        .select(`*, profiles(*)`)
         .eq("status", "Closed");
 
     const closedPolls = data?.length;
 
     return (
         <div id="closed">
-            <h1>Closed Polls ({closedPolls})</h1>
+            {closedPolls === 0 ? (
+                <div>
+                    <img src="/polling.svg " alt="No active polls" className="mx-auto w-1/3" />
+                    <p className="text-center">No closed polls</p>
+                </div>
+            ) : (
+                <div className="space-y-4">
+                    {data?.map((poll: any, index: number) => (
+                        <PollCard poll={poll} user={user} trip_id={trip_id} isOwner={user.id == poll.profiles.id} key={index} />
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

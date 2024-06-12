@@ -34,9 +34,9 @@ export default function VoteRanking({ poll_id, trip_id }: { poll_id: number, tri
     };
 
     const fetchTotalUsers = async () => {
-        const { data, error } = await supabase
+        const { count, error } = await supabase
             .from("trip_participants")
-            .select('trip_participant_id')
+            .select('*', { count: 'exact', head: true })
             .eq("trip_id", trip_id);
 
         if (error) {
@@ -44,7 +44,7 @@ export default function VoteRanking({ poll_id, trip_id }: { poll_id: number, tri
             return;
         }
 
-        setTotalUsers(data?.length);
+        setTotalUsers(count);
     };
 
     useEffect(() => {
