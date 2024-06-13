@@ -10,6 +10,7 @@ export async function GET(request: Request) {
 
     try {
         const { data, error } = await supabase.rpc('get_trip_plans', { user_id: user.id });
+
         if (error) {
             console.error(error);
             return new Response(JSON.stringify({ error: 'Could not fetch trips' }), { status: 400 });

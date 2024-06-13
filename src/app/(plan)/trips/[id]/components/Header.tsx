@@ -38,7 +38,7 @@ export default async function Header(params: any) {
                                     tripData[0].host_avatar_url
                                 ) : (
                                     `https://source.boringavatars.com/marble/120/${tripData[0].host_email}`
-                                )} alt="Avatar" />
+                                )} alt="Avatar" className="object-cover"/>
                             <AvatarFallback>JN</AvatarFallback>
                         </Avatar>
                         <p>{tripData[0]?.host_username ? (tripData[0].host_username) : tripData[0].host_email}</p>

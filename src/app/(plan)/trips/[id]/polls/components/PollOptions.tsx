@@ -90,8 +90,8 @@ export default function PollOptions({ poll_id, user_id, status }: PollOptionsPro
     return (
         <div className="grid justify-items-stretch space-y-2">
             {data?.map((answer: any, index: number) => (
-                <div key={answer.poll_answer_id} className="grid gap-2">
-                    <Button 
+                <div key={index} className="grid gap-2">
+                    <Button
                         variant="outline"
                         className={`text-left flex-grow ${userVotes[answer.poll_answer_id] ? "border-2 text-[#baff66] border-[#baff66] bg-[#0c1f19]" : ""}`}
                         onClick={() => updateVote(answer.poll_answer_id)}

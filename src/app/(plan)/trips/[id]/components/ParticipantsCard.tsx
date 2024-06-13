@@ -35,7 +35,7 @@ export default async function ParticipantsCard({ trip_id }: Props) {
             <CardHeader>
                 <CardTitle>Who will join?</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex space-x-4">
                 {data?.length === 0 ? (
                     <CardDescription>No participants yet</CardDescription>
                 ) : (

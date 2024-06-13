@@ -68,8 +68,8 @@ async function ActivePolls({ trip_id }: { trip_id: string }) {
 
     return (
         <div id="active">
-            <div className="flex justify-between">
-                <AddPollDialog trip_id={trip_id} user={user} />
+            <div className="flex justify-end">
+                <AddPollDialog trip_id={trip_id} user={user}/>
             </div>
             {activePolls === 0 ? (
                 <div>
