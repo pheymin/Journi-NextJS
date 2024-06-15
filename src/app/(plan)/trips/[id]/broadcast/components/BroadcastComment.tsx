@@ -29,16 +29,10 @@ type User = {
 
 type Props = {
     broadcast: Broadcast;
+    user: User;
 };
 
-
-export default async function BroadcastComment({ broadcast }: Props) {
-    const supabase = createClient();
-    const { count, error } = await supabase
-        .from("broadcast_comment")
-        .select('*', { count: 'exact', head: true })
-        .eq("broadcast_id", broadcast.broadcast_id);
-
+export default async function BroadcastComment({ broadcast, user }: Props) {
     //submits a comment
     const postComment = async (formData: FormData) => {
         "use server";
@@ -49,7 +43,7 @@ export default async function BroadcastComment({ broadcast }: Props) {
             .from("broadcast_comment")
             .insert({
                 broadcast_id: broadcast.broadcast_id,
-                user_id: broadcast.profiles.id,
+                user_id: user.id,
                 content: comment,
             });
 
@@ -75,9 +69,7 @@ export default async function BroadcastComment({ broadcast }: Props) {
                                 Post
                             </SubmitButton>
                         </form>
-                        {count === 0 ? "" :
-                            <Comments broadcast={broadcast} />
-                        }
+                        <Comments broadcast={broadcast} />
                     </div>
                 </AccordionContent>
             </AccordionItem>

@@ -87,7 +87,7 @@ export default async function BroadcastCard({ broadcast, user }: Props) {
                     <BroadcastAction broadcast={broadcast} />
                     <hr />
                     <div>
-                        <BroadcastComment broadcast={broadcast} />
+                        <BroadcastComment broadcast={broadcast} user={user} />
                     </div>
                 </div>
             </div>

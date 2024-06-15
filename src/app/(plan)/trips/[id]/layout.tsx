@@ -11,11 +11,11 @@ export default function Layout({
     return (
         <div className="flex flex-col w-full min-h-screen">
             <Header tripId={params.id} />
-            <div className="flex flex-grow">
-                <div className="flex">
-                    <Sidebar trip_id={params.id}/>
+            <div className="flex flex-grow flex-col md:flex-row">
+                <div className="order-2 md:order-1 md:flex">
+                    <Sidebar trip_id={params.id} />
                 </div>
-                <div className="flex-grow ps-8 p-4">
+                <div className="order-1 md:order-2 flex-grow ps-8 p-4">
                     {children}
                 </div>
             </div>

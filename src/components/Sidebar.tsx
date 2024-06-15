@@ -13,7 +13,6 @@ import {
 import { Button } from "./ui/button";
 import { supabaseBrowser } from "@/utils/supabase/client";
 import { format } from "date-fns"
-import { it } from "node:test";
 
 type Props = {
   trip_id: string;
@@ -93,7 +92,7 @@ export default function Sidebar({trip_id}: Props) {
   const baseRoute = `/trips/${trip_id}`;
 
   return (
-    <div className="relative min-w-[80px] border-r px-3 pb-10">
+    <div className={mobileWidth ? "fixed bottom-0 left-0 right-0 py-2 bg-muted border-y-2" : "relative min-w-[80px] border-r px-3 pb-10"}>
       {!mobileWidth && (
         <div className="absolute right-[-20px] top-12">
           <Button

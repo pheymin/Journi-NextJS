@@ -15,7 +15,6 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { SubmitButton } from "@/components/submit-button";
 import { useToast } from "@/components/ui/use-toast";
@@ -95,8 +94,8 @@ type BroadcastFormProps = React.ComponentProps<'form'> & { user: any } & { trip_
 const FormSchema = z.object({
     message:
         z.string()
-            .min(10, {
-                message: "Message must be at least 10 characters.",
+            .min(2, {
+                message: "Message must be at least 2 characters.",
             })
             .max(160, {
                 message: "Message must not be longer than 30 characters.",
@@ -150,7 +149,7 @@ const BroadcastForm: React.FC<BroadcastFormProps> = ({ className, user, trip_id 
                         <Avatar className="size-9">
                             <AvatarImage
                                 src={
-                                    user?.avatar_url ||
+                                    user.avatar_url ? user.avatar_url :
                                     `https://source.boringavatars.com/marble/120/${user.email}`
                                 }
                                 alt="Avatar"
@@ -162,7 +161,11 @@ const BroadcastForm: React.FC<BroadcastFormProps> = ({ className, user, trip_id 
                             name="message"
                             render={({ field }) => (
                                 <FormItem className="w-full">
-                                    <FormLabel>{user?.username || user?.full_name || user.email}</FormLabel>
+                                    <FormLabel>
+                                    {user.username ? `@${user.username}` :
+                                        user.full_name ? user.full_name :
+                                        user.email}
+                                    </FormLabel>
                                     <FormControl>
                                         <Textarea
                                             placeholder="Write your message here"

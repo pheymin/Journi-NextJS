@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -17,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useEffect, useState } from "react";
 
 interface NavProps {
   isCollapsed: boolean;
@@ -36,6 +36,63 @@ interface NavProps {
 
 export function Nav({ links, isCollapsed }: NavProps) {
   const pathName = usePathname();
+  const [mobileWidth, setMobileWidth] = useState(false);
+
+  const handleResize = () => {
+    setMobileWidth(window.innerWidth < 768);
+  };
+
+  useEffect(() => {
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  if (mobileWidth) {
+    return (
+      <TooltipProvider>
+        <nav className="grid grid-cols-5 px-2 justify-center place-items-center">
+          {links.map((link, index) =>
+            <Tooltip key={index} delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Link
+                  href={link.href}
+                  className={cn(
+                    buttonVariants({
+                      variant: link.href === pathName ? "default" : "ghost",
+                      size: "icon"
+                    }),
+                    "size-9",
+                    link.variant === "default" &&
+                    "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+                  )}
+                >
+                  <link.icon className="h-4 w-4" />
+                  <span className="sr-only">{link.title}</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent
+                side="right"
+                className="flex items-center gap-4"
+              >
+                {link.title}
+                {link.label && (
+                  <span className="ml-auto text-muted-foreground">
+                    {link.label}
+                  </span>
+                )}
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </nav>
+      </TooltipProvider>
+    )
+  }
+
   return (
     <TooltipProvider>
       <div

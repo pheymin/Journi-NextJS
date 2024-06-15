@@ -129,7 +129,7 @@ export default function TripDetails(tripData: any) {
                 </PopoverContent>
             </Popover>
             <Textarea
-                className="text-center px-2 py-1 border-none"
+                className="text-center px-2 py-1 border-none resize-none"
                 placeholder="Description"
                 defaultValue={trip.description}
                 onChange={(e) => setTrip({ ...trip, description: e.target.value })}

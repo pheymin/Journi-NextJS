@@ -41,15 +41,16 @@ export default function BroadcastComment({ broadcast }: Props) {
 
     useEffect(() => {
         fetchComments();
-
+        console.log("Broadcast ID", broadcast.broadcast_id);
         const subscription = supabase
-            .channel(`broadcast_comment:${broadcast.broadcast_id}`)
+            .channel(`broadcast_comments:${broadcast.broadcast_id}`)
             .on('postgres_changes', {
                 event: '*',
                 schema: 'public',
                 table: 'broadcast_comment',
                 filter: `broadcast_id=eq.${broadcast.broadcast_id}`
             }, (payload) => {
+                console.log("Change received!", payload);
                 fetchComments();
             })
             .subscribe();
@@ -73,6 +74,10 @@ export default function BroadcastComment({ broadcast }: Props) {
 
         setComments(data);
     };
+
+    if (comments.length === 0) {
+        return <></>;
+    }
 
     return (
         <div className="space-y-4">
