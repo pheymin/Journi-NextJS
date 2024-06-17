@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         .eq("status", "Closed");
 
     return (
-        <div>
+        <div className="p-2 md:p-4">
             <div className="w-full h-full space-y-3">
                 <div>
                     <h3 className="font-semibold text-xl leading-none tracking-tight mb-2">Polls</h3>

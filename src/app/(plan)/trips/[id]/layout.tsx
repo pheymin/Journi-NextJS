@@ -15,7 +15,7 @@ export default function Layout({
                 <div className="order-2 md:order-1 md:flex">
                     <Sidebar trip_id={params.id} />
                 </div>
-                <div className="order-1 md:order-2 flex-grow ps-8 p-4">
+                <div className="order-1 md:order-2 flex-grow md:ps-8 justify-center">
                     {children}
                 </div>
             </div>

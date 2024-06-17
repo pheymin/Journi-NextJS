@@ -88,7 +88,7 @@ export default function Sections({ trip_id }: Props) {
                                 defaultValue={section.title} required />
                         </AccordionTrigger>
                         <AccordionContent>
-                            <SectionPOI section_id={section.section_id} />
+                            <SectionPOI section_id={section.section_id} section_index={index} />
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>

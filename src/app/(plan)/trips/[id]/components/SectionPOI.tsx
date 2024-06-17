@@ -5,11 +5,12 @@ import AddPOI from "@/components/AddPOI";
 import { Textarea } from "@/components/ui/textarea";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationPin } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "@/components/ui/button";
 import { ChevronUpIcon, ChevronDownIcon, TrashIcon } from "@radix-ui/react-icons"
+import { POI_COLORS } from "@/utils/constant";
 
 type Props = {
     section_id: number;
+    section_index: number;
 };
 
 interface SectionPOI {
@@ -22,9 +23,10 @@ interface SectionPOI {
     POI: any;
 }
 
-export default function SectionPOI({ section_id }: Props) {
+export default function SectionPOI({ section_id, section_index }: Props) {
     const supabase = supabaseBrowser();
     const [POIs, setPOIs] = useState<SectionPOI[]>([]);
+    const section_color = POI_COLORS[section_index % POI_COLORS.length];
 
     const fetchSectionPOIs = async () => {
         const { data, error } = await supabase
@@ -57,7 +59,6 @@ export default function SectionPOI({ section_id }: Props) {
         return () => {
             channel.unsubscribe();
         }
-
     }, [section_id]);
 
     const handlePlaceSelected = async (placeId: string) => {
@@ -125,7 +126,7 @@ export default function SectionPOI({ section_id }: Props) {
                                 <div className={`${POIs.length > 1 ? 'col-span-6' : 'col-span-7'} h-full`}>
                                     <div className="flex space-x-1">
                                         <div className="relative">
-                                            <FontAwesomeIcon icon={faLocationPin} className="size-7 text-[#baff66]" />
+                                            <FontAwesomeIcon icon={faLocationPin} className={`size-7 text-[${section_color}]`} />
                                             <span className="absolute top-3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#0c1f19] font-bold">{SectionPOI.sequence_num}</span>
                                         </div>
                                         <h4 className="font-semibold text-base ml-6 mb-2 space-x-2">{SectionPOI.POI.name}</h4>

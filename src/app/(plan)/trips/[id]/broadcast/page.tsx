@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     const broadcastsLength = broadcasts?.length;
 
     return (
-        <div>
+        <div className="p-2 md:p-4">
             <div className="w-full h-full space-y-3">
                 <div className="w-full md:w-3/5 m-auto">
                     <h3 className="font-semibold text-xl leading-none tracking-tight mb-2">Broadcast</h3>

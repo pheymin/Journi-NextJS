@@ -17,22 +17,18 @@ export async function GET(request: Request) {
         }
 
         // Use data.place_id to get place photo for each trip plan
-        const enhancedData = await Promise.all(data.map(async (plan: any) => {
-            try {
-                const placeDetailsResponse = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${plan.place_id}&fields=photo&key=${process.env.NEXT_PUBLIC_MAPS_API_KEY}`);
-                const placeDetails = await placeDetailsResponse.json();
-
-                if (placeDetails.result && placeDetails.result.photos && placeDetails.result.photos.length > 0) {
-                    const photoReference = placeDetails.result.photos[0].photo_reference;
-                    plan.image = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.NEXT_PUBLIC_MAPS_API_KEY}`;
-                } else {
-                    plan.image = null; // Or set a default image URL
-                }
-            } catch (photoError) {
-                console.error('Error fetching photo details:', photoError);
-                plan.image = null; // Or set a default image URL
+        const enhancedData = await Promise.all(data.map(async (trip: any) => {
+            const {data, error} = await supabase.from('POI').select('image_url').eq('place_id', trip.place_id);
+            if (error) {
+                console.error(error);
+                return trip;
             }
-            return plan;
+            
+            let image = data[0]?.image_url || 'https://source.unsplash.com/1600x900/?nature,water';
+            return {
+                ...trip,
+                image
+            }
         }));
 
         return new Response(JSON.stringify(enhancedData), { status: 200 });

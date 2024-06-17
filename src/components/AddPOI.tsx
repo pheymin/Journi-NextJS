@@ -1,11 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { useJsApiLoader } from "@react-google-maps/api";
-import { Library } from "@googlemaps/js-api-loader";
 import { Input } from "@/components/ui/input";
 import { supabaseBrowser } from "@/utils/supabase/client";
-
-const libs: Library[] = ["places", "maps"];
+import { useGoogleMapsLoader } from "@/utils/googleMapsLoader";
 
 type AddPOIProps = {
     onPlaceSelected: (placeId: string) => void;
@@ -14,14 +11,11 @@ type AddPOIProps = {
 export default function AddPOI({ onPlaceSelected }: AddPOIProps) {
     //maps autocomplete
     const [autoComplete, setAutoComplete] = useState<google.maps.places.Autocomplete | null>(null);
-    const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY as string,
-        libraries: libs,
-    });
+    const { isLoaded, loadError } = useGoogleMapsLoader();
     const placeAutoComplete = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (isLoaded && placeAutoComplete.current) {
+        if (placeAutoComplete.current) {
             //limit the place bound by place id
             const defaultBounds = new google.maps.LatLngBounds(
                 new google.maps.LatLng(-90, -180),
@@ -38,10 +32,10 @@ export default function AddPOI({ onPlaceSelected }: AddPOIProps) {
                 document.body.style.pointerEvents = "";
             }, 0);
         }
-    }, [isLoaded]);
+    }, []);
 
     useEffect(() => {
-        if (isLoaded && autoComplete) {
+        if (autoComplete) {
             autoComplete.addListener('place_changed', () => {
                 const place = autoComplete.getPlace();
 
@@ -56,7 +50,7 @@ export default function AddPOI({ onPlaceSelected }: AddPOIProps) {
                 google.maps.event.clearInstanceListeners(autoComplete);
             };
         }
-    }, [autoComplete, isLoaded]);
+    }, [autoComplete]);
 
     const storePlaceDetails = async (place:any) => {
         const supabase = supabaseBrowser();

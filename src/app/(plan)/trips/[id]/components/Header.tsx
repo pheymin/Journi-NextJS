@@ -15,13 +15,13 @@ export default async function Header(params: any) {
         return <div>404 - Not Found</div>;
     }
 
-    const placeDetailsResponse = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${tripData[0].place_id}&fields=photo&key=${process.env.NEXT_PUBLIC_MAPS_API_KEY}`);
-    const placeDetails = await placeDetailsResponse.json();
+    const { data: poi, error: poiError } = await supabase.from('POI').select('image_url').eq('place_id', tripData[0].place_id);
+    if (poiError) {
+        console.error(poiError);
+    }
     let cover = 'https://source.unsplash.com/1600x900/?nature,water';
-
-    if (placeDetails.result && placeDetails.result.photos && placeDetails.result.photos.length > 0) {
-        const photoReference = placeDetails.result.photos[0].photo_reference;
-        cover = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.NEXT_PUBLIC_MAPS_API_KEY}`;
+    if (poi) {
+        cover = poi[0]?.image_url;
     }
 
     return (

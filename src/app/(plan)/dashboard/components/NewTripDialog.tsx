@@ -19,8 +19,6 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useState, useRef, useEffect } from "react";
-import { Library } from "@googlemaps/js-api-loader";
-import { useJsApiLoader } from "@react-google-maps/api";
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -44,6 +42,9 @@ import { CalendarIcon } from "@radix-ui/react-icons"
 import { addDays, format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
+import { supabaseBrowser } from "@/utils/supabase/client";
+import { useGoogleMapsLoader } from "@/utils/googleMapsLoader";
+
 
 const typesSchema = z.object({
     label: z.string(),
@@ -68,8 +69,6 @@ const FormSchema = z.object({
     }),
     status: z.string({ message: "Please select a status" }),
 });
-
-const libs: Library[] = ["places", "maps"];
 
 export default function NewTripDialog() {
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -141,10 +140,7 @@ export default function NewTripDialog() {
 
     //maps autocomplete
     const [autoComplete, setAutoComplete] = useState<google.maps.places.Autocomplete | null>(null);
-    const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY as string,
-        libraries: libs,
-    });
+    const { isLoaded } = useGoogleMapsLoader();
     const placeAutoComplete = useRef<HTMLInputElement>(null);
     const [open, setOpen] = useState(false);
     const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
@@ -153,7 +149,7 @@ export default function NewTripDialog() {
     useEffect(() => {
         if (isLoaded && placeAutoComplete.current) {
             const gautoComplete = new google.maps.places.Autocomplete(placeAutoComplete.current as HTMLInputElement, {
-                fields: ['place_id', 'name'],
+                fields: ['place_id', 'name', 'geometry', 'photos'],
             });
             setAutoComplete(gautoComplete);
             setTimeout(() => {
@@ -167,10 +163,10 @@ export default function NewTripDialog() {
             autoComplete.addListener('place_changed', () => {
                 const place = autoComplete.getPlace();
                 setSelectedPlaceId(place.place_id as string);
-                if (place && place.place_id && place.name) {
-                    form.setValue('place_name', place.name);
+                if (place && place.place_id && place.name && place.geometry) {
                     form.setValue('place_id', place.place_id);
-                    setSelectedPlaceId(place.place_id);
+                    form.setValue('place_name', place.name);
+                    storePlaceDetails(place);
                 }
             });
 
@@ -180,6 +176,20 @@ export default function NewTripDialog() {
             };
         }
     }, [autoComplete, isLoaded, open]);
+
+    const storePlaceDetails = async (place: any) => {
+        const supabase = supabaseBrowser();
+        const { data, error } = await supabase.from('POI').upsert({
+            place_id: place.place_id,
+            name: place.name,
+            geometry: place.geometry,
+            image_url: place.photos[0].getUrl(),
+        });
+
+        if (error) {
+            console.error('Error storing place details:', error);
+        }
+    };
 
     //invite tripmates toggle
     const [showInviteCombo, setShowInviteCombo] = useState(false);
