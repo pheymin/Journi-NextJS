@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import SectionPOI from "./SectionPOI";
+import AddPOI from "@/components/AddPOI";
+import NearbySearch from "@/components/NearbySearch";
 
 type Props = {
     trip_id: string;
@@ -19,6 +21,12 @@ interface Section {
     trip_id: number;
     title: string;
     created_at: string;
+    trips: Trip;
+}
+
+interface Trip {
+    trip_id: number;
+    POI: any;
 }
 
 export default function Sections({ trip_id }: Props) {
@@ -28,7 +36,7 @@ export default function Sections({ trip_id }: Props) {
     const fetchSections = async () => {
         const { data, error } = await supabase
             .from("section")
-            .select("*")
+            .select(`*, trips(POI(*))`)
             .eq("trip_id", trip_id);
 
         if (error) {
@@ -47,7 +55,7 @@ export default function Sections({ trip_id }: Props) {
                 event: '*',
                 schema: 'public',
                 table: 'section',
-            }, (payload) => {
+            }, () => {
                 fetchSections();
             })
             .subscribe();
@@ -74,6 +82,17 @@ export default function Sections({ trip_id }: Props) {
         }
     }
 
+    const handlePlaceSelected = (section_id: number) => async (placeId: string) => {
+        const { error } = await supabase.rpc("insert_section_poi", {
+            p_section_id: section_id,
+            p_place_id: placeId,
+        });
+    
+        if (error) {
+            console.error("Error inserting POI", error);
+        }
+    };
+
     return (
         <div>
             {sections.map((section: Section, index: number) => (
@@ -89,6 +108,8 @@ export default function Sections({ trip_id }: Props) {
                         </AccordionTrigger>
                         <AccordionContent>
                             <SectionPOI section_id={section.section_id} section_index={index} />
+                            <AddPOI onPlaceSelected={handlePlaceSelected(section.section_id)}  />
+                            <NearbySearch place_types={["point_of_interest", section.title]} location={section.trips.POI.geometry.location} onPlaceSelected={handlePlaceSelected(section.section_id)} />
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>

@@ -1,1 +1,1 @@
-export const POI_COLORS = ['#baff66', '#69de00', '#03bc00', '#009d17', '#006d25'];
+export const POI_COLORS = ['#baff66', '#5efec1', '#30996a', '#207450', '#926632', '#533b0d'];

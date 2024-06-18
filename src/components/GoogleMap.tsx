@@ -14,6 +14,7 @@ const GoogleMap = ({ POI, sections_poi }: Props) => {
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const { isLoaded } = useGoogleMapsLoader();
     const mapRef = useRef<HTMLDivElement>(null);
+    const markersRef = useRef<google.maps.Marker[]>([]);
 
     useEffect(() => {
         if (isLoaded && mapRef.current) {
@@ -26,13 +27,19 @@ const GoogleMap = ({ POI, sections_poi }: Props) => {
             setMap(googleMap);
             setMarkers();
         }
-    }, [isLoaded]);
+    }, [isLoaded, POI]);
 
     useEffect(() => {
-        if (map) {
+        if (map && sections_poi) {
+            clearMarkers();
             setMarkers();
         }
-    }, [map]);
+    }, [map, sections_poi]);
+
+    function clearMarkers() {
+        markersRef.current.forEach(marker => marker.setMap(null));
+        markersRef.current = [];
+    }
 
     function setMarkers() {
         if (!map) return;
@@ -45,7 +52,18 @@ const GoogleMap = ({ POI, sections_poi }: Props) => {
                         map: map,
                         title: poi.POI.name,
                         content: setStyle(poi.sequence_num, index),
+                        gmpClickable: true,
                     });
+
+                    marker.addListener('click', () => {
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: infoWindowStyle(poi.POI)
+                            // content: `<h1>${poi.POI.name}</h1><p>${poi.POI.formatted_address}</p>`
+                        });
+
+                        infoWindow.open(map, marker);
+                    });
+
                 });
             });
         }
@@ -91,6 +109,22 @@ const setStyle = (number: number, section: number): HTMLElement => {
     content.appendChild(numberSpan);
 
     return content;
+}
+
+const infoWindowStyle = (poi: any) => {
+    return `
+    <div style="color: #000;width: fit-content;">
+        <img src="${poi.image_url}" alt="${poi.name}" style="width: 100%;height: 150px;object-fit: cover;border-radius: 0.5rem;">
+        <a href="${poi.google_url}" style="font-size: 1.25rem;font-weight: bold;margin: 0.5rem 0;">${poi.name}</a>
+        <p style="margin-bottom: 0.5rem;">${poi.address}</p>
+        <div style="display: flex;flex-wrap: wrap;flex-direction: row;align-items: center;margin-bottom: 0.5rem;">
+            ${poi.types.map((type: string) => `<span style="background-color: #f5f5f5;border: 1px solid #e0e0e0;border-radius: 0.25rem;padding: 0.25rem;margin: 0.25rem;">${type}</span>`).join('')}
+        </div>
+        <div style="display: flex;align-items: center; color: #f5a623;font-weight: bold;">
+            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" class="svg-inline--fa fa-star fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" style="color: #f5a623;"><path fill="currentColor" d="M288 4.6l70.1 158.5 175.9 16.2c19.6 1.8 27.6 27.1 12.9 41L431.7 286.3l41.8 174.7c4.6 19.4-16.2 34.1-32.3 25.4L288 391.7 136.9 486.4c-16.1 8.7-36.9-6-32.3-25.4l41.8-174.7L19.1 220.3c-14.7-13.9-6.7-39.2 12.9-41l175.9-16.2L288 4.6z"></path></svg>
+            <span>${poi.rating}</span>
+        </div>
+    </div>`;
 }
 
 export default GoogleMap

@@ -15,13 +15,7 @@ export default function AddPOI({ onPlaceSelected }: AddPOIProps) {
     const placeAutoComplete = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (placeAutoComplete.current) {
-            //limit the place bound by place id
-            const defaultBounds = new google.maps.LatLngBounds(
-                new google.maps.LatLng(-90, -180),
-                new google.maps.LatLng(90, 180)
-            );
-
+        if (isLoaded && placeAutoComplete.current) {
             //create the autocomplete
             const gautoComplete = new google.maps.places.Autocomplete(placeAutoComplete.current as HTMLInputElement, {
                 // bounds: defaultBounds,
@@ -32,16 +26,18 @@ export default function AddPOI({ onPlaceSelected }: AddPOIProps) {
                 document.body.style.pointerEvents = "";
             }, 0);
         }
-    }, []);
+    }, [isLoaded]);
 
     useEffect(() => {
         if (autoComplete) {
-            autoComplete.addListener('place_changed', () => {
+            autoComplete.addListener('place_changed', async () => {
                 const place = autoComplete.getPlace();
 
                 if (place && place.place_id && place.name) {
-                    storePlaceDetails(place);
-                    onPlaceSelected(place.place_id);
+                    const storePlace = await storePlaceDetails(place);
+                    if (storePlace) {
+                        onPlaceSelected(place.place_id);
+                    }
                 }
             });
 
@@ -50,30 +46,33 @@ export default function AddPOI({ onPlaceSelected }: AddPOIProps) {
                 google.maps.event.clearInstanceListeners(autoComplete);
             };
         }
-    }, [autoComplete]);
+    }, [autoComplete, isLoaded]);
 
-    const storePlaceDetails = async (place:any) => {
+    const storePlaceDetails = async (place: any): Promise<boolean> => {
         const supabase = supabaseBrowser();
         const { data, error } = await supabase.from('POI').upsert({
             place_id: place.place_id,
             name: place.name,
             address: place.formatted_address,
-            rating: place?.rating,
-            types: place.types,
+            rating: place?.rating || null,
+            types: place.types || null,
             google_url: place.url,
             geometry: place.geometry,
-            image_url: place.photos[0].getUrl(),
-            opening_hours: place?.opening_hours,
+            image_url: place.photos && place.photos.length > 0 ? place.photos[0].getUrl() : "https://epsmolduras.cl/wp-content/uploads/2022/02/imagen-no-disponible01601774755-1.jpg",
+            opening_hours: place?.opening_hours || null,
         }).select();
 
         if (error) {
             console.error(error);
+            return false;
         }
+        return true;
     }
 
     return (
         <div>
             <Input
+                className="h-12 w-full"
                 ref={placeAutoComplete}
                 placeholder="Add a place"
                 required
