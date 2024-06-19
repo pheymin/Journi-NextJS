@@ -36,7 +36,7 @@ export default function NearbySearch({ place_types, location, onPlaceSelected }:
 
                 nearby.nearbySearch({
                     location: location,
-                    radius: 1000,
+                    radius: 2000,
                     type: place_types[0],
                     keyword: place_types[1],
                 }, (results, status) => {

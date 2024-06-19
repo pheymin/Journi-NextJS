@@ -33,7 +33,7 @@ interface Section {
   created_at: string;
 }
 
-export default function Sidebar({trip_id}: Props) {
+export default function Sidebar({ trip_id }: Props) {
   const supabase = supabaseBrowser();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileWidth, setMobileWidth] = useState(false);
@@ -54,7 +54,7 @@ export default function Sidebar({trip_id}: Props) {
       console.error("Error fetching itinerary", error);
     }
 
-    setItinerary(data ?? []); 
+    setItinerary(data ?? []);
   };
 
   const fetchSections = async () => {
@@ -73,6 +73,22 @@ export default function Sidebar({trip_id}: Props) {
   useEffect(() => {
     fetchItinerary();
     fetchSections();
+
+    const itineraryChannel = supabase
+      .channel(`itinerary:${trip_id}`)
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'itinerary',
+        filter: `trip_id=eq.${trip_id}`
+      }, () => {
+        fetchItinerary();
+      })
+      .subscribe();
+
+    return () => {
+      itineraryChannel.unsubscribe();
+    }
   }, [trip_id]);
 
   useEffect(() => {

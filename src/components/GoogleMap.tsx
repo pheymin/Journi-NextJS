@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useGoogleMapsLoader } from "@/utils/googleMapsLoader";
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -7,10 +7,11 @@ import { POI_COLORS } from "@/utils/constant";
 
 type Props = {
     POI: any;
-    sections_poi: any;
+    sections_poi?: any | null;
+    itinerary_poi?: any | null;
 }
 
-const GoogleMap = ({ POI, sections_poi }: Props) => {
+const GoogleMap = ({ POI, sections_poi, itinerary_poi }: Props) => {
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const { isLoaded } = useGoogleMapsLoader();
     const mapRef = useRef<HTMLDivElement>(null);
@@ -30,7 +31,7 @@ const GoogleMap = ({ POI, sections_poi }: Props) => {
     }, [isLoaded, POI]);
 
     useEffect(() => {
-        if (map && sections_poi) {
+        if (map && sections_poi || itinerary_poi) {
             clearMarkers();
             setMarkers();
         }
@@ -39,7 +40,7 @@ const GoogleMap = ({ POI, sections_poi }: Props) => {
     function clearMarkers() {
         markersRef.current.forEach(marker => marker.setMap(null));
         markersRef.current = [];
-    }
+    }    
 
     function setMarkers() {
         if (!map) return;
@@ -58,7 +59,29 @@ const GoogleMap = ({ POI, sections_poi }: Props) => {
                     marker.addListener('click', () => {
                         const infoWindow = new google.maps.InfoWindow({
                             content: infoWindowStyle(poi.POI)
-                            // content: `<h1>${poi.POI.name}</h1><p>${poi.POI.formatted_address}</p>`
+                        });
+
+                        infoWindow.open(map, marker);
+                    });
+
+                });
+            });
+        }
+
+        if (itinerary_poi) {
+            itinerary_poi.forEach((itinerary: any, index: number) => {
+                itinerary.itinerary_poi.forEach((poi: any) => {
+                    const marker = new google.maps.marker.AdvancedMarkerElement({
+                        position: poi.POI.geometry.location,
+                        map: map,
+                        title: poi.POI.name,
+                        content: setStyle(poi.sequence_num, index),
+                        gmpClickable: true,
+                    });
+
+                    marker.addListener('click', () => {
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: infoWindowStyle(poi.POI)
                         });
 
                         infoWindow.open(map, marker);

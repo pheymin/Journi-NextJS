@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
+import AuthButton from '@/components/AuthButton';
 
 const APP_NAME = "Journi";
 const APP_DEFAULT_TITLE = "Journi";
