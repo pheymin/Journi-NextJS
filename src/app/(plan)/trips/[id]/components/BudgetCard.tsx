@@ -2,7 +2,6 @@ import { createClient } from "@/utils/supabase/server";
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -19,7 +18,8 @@ export default async function ParticipantsCard({ trip_id }: Props) {
     const { data, error } = await supabase
         .from("budget")
         .select(`*`)
-        .eq("trip_id", trip_id);
+        .eq("trip_id", trip_id)
+        .single();
 
     return (
         <Card className="w-full">
@@ -27,16 +27,12 @@ export default async function ParticipantsCard({ trip_id }: Props) {
                 <CardTitle>Budgeting</CardTitle>
             </CardHeader>
             <CardContent>
-                {data?.length === 0 ? (
-                    <p className="font-bold text-3xl">MYR 0</p>
+                {data ? (
+                    <p className="font-bold text-3xl">MYR {data.budget_amount}</p>
                 ) : (
-                    data?.map((budget: any) => (
-                        <div key={budget.id}>
-                            <p>{budget.amount}</p>
-                        </div>
-                    ))
+                    <p className="font-bold text-3xl">MYR 0</p>
                 )}
-                <Link href={`/plan/trips/${trip_id}/budget`} className="text-blue-500">
+                <Link href={`/trips/${trip_id}/budget`} className="text-blue-500">
                     View details
                 </Link>
             </CardContent>

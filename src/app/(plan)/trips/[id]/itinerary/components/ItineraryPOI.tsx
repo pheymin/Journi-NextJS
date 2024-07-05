@@ -1,6 +1,5 @@
 "use client";
-"use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { supabaseBrowser } from "@/utils/supabase/client";
 import { Textarea } from "@/components/ui/textarea";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -64,7 +64,7 @@ export default function NearbySearch({ place_types, location, onPlaceSelected }:
         const { data, error } = await supabase.from('POI').upsert({
             place_id: place.place_id,
             name: place.name,
-            address: place.formatted_address,
+            address: place?.vicinity || null,
             rating: place?.rating || null,
             types: place.types || null,
             google_url: place.url,

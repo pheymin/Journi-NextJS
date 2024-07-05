@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     </div>
                     {broadcastsLength === 0 ? (
                         <div>
-                            {/* <img src="/polling.svg " alt="No active polls" className="mx-auto w-1/3" /> */}
+                            <img src="/polling.svg " alt="No active polls" className="mx-auto w-1/3" />
                             <p className="text-center">No broadcasts yet</p>
                         </div>
                     ) : (
