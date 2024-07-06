@@ -67,7 +67,6 @@ export default function NearbySearch({ place_types, location, onPlaceSelected }:
             address: place?.vicinity || null,
             rating: place?.rating || null,
             types: place.types || null,
-            google_url: place.url,
             geometry: place.geometry,
             image_url: place.photos && place.photos.length > 0 ? place.photos[0].getUrl() : "https://epsmolduras.cl/wp-content/uploads/2022/02/imagen-no-disponible01601774755-1.jpg",
         });

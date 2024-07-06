@@ -149,10 +149,11 @@ export default function Itineraries({ trip_id }: Props) {
                             <ItineraryPOI itinerary_id={itinerary.itinerary_id} itinerary_index={index} />
                             <AddPOI onPlaceSelected={handlePlaceSelected(itinerary.itinerary_id)} />
                             {types[index] &&
-                                <NearbySearch
-                                    place_types={["point_of_interest", types[index]]}
-                                    location={itinerary.trips.POI.geometry.location}
-                                    onPlaceSelected={handlePlaceSelected(itinerary.itinerary_id)} />
+                                <></>
+                                // <NearbySearch
+                                //     place_types={["point_of_interest", types[index]]}
+                                //     location={itinerary.trips.POI.geometry.location}
+                                //     onPlaceSelected={handlePlaceSelected(itinerary.itinerary_id)} />
                             }
                         </AccordionContent>
                     </AccordionItem>

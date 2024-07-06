@@ -138,9 +138,9 @@ const infoWindowStyle = (poi: any) => {
     if (!poi) {
         return '';
     }
-    console.log(poi);
+
     const image = poi.image_url ? `<img src="${poi.image_url}" alt="${poi.name}" style="width: 100%;height: 150px;object-fit: cover;border-radius: 0.5rem;">` : '';
-    const name = poi.name ? `<a href="${poi.google_url}" style="font-size: 1.25rem;font-weight: bold;margin: 0.5rem 0;">${poi.name}</a>` : '';
+    const name = poi.name ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(poi.name)}&query_place_id=${poi.place_id}" target="_blank" rel="noopener noreferrer" style="font-size: 1.25rem;font-weight: bold;margin: 0.5rem 0;">${poi.name}</a>` : '';
     const address = poi.address ? `<p style="margin-bottom: 0.5rem;">${poi.address}</p>` : '';
     const types = poi.types ? poi.types.map((type: string) => `<span style="background-color: #f5f5f5;border: 1px solid #e0e0e0;border-radius: 0.25rem;padding: 0.25rem;margin: 0.25rem;">${type}</span>`).join('') : '';
     const rating = poi.rating ? `<div style="display: flex;align-items: center; color: #f5a623;font-weight: bold;">
