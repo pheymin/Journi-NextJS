@@ -1,11 +1,9 @@
 "use client";
 import { supabaseBrowser } from "@/utils/supabase/client";
-import React, { use } from 'react';
+import React from 'react';
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMap } from '@fortawesome/free-solid-svg-icons'
 import { Ellipsis } from "lucide-react";
 import {
     DropdownMenu,
@@ -131,7 +129,7 @@ export default function Page() {
                     </>
                 ) : filteredPlans.length === 0 ? (
                     <div className="col-span-full flex flex-col h-[250px] items-center justify-center space-y-2">
-                        <FontAwesomeIcon icon={faMap} size="2x" />
+                         <img src="/polling.svg " alt="No data" className="mx-auto w-1/3" />
                         <p className="text-lg text-center">No trip plans found</p>
                     </div>
                 ) : (

@@ -111,7 +111,7 @@ export default function SectionPOI({ section_id, section_index }: Props) {
                         <div className={`${POIs.length > 1 ? 'col-span-6' : 'col-span-7'} h-full flex flex-col`}>
                             <div className="flex shrink-0 space-x-1 grow-0 items-center">
                                 <div className="relative">
-                                    <FontAwesomeIcon icon={faLocationPin} className={`size-7 fill-[${section_color}] text-[${section_color}]`} />
+                                    <FontAwesomeIcon icon={faLocationPin} className={`size-7`} style={{ color: section_color }} />
                                     <span className="absolute top-3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#0c1f19] font-bold">{SectionPOI.sequence_num}</span>
                                 </div>
                                 <h4 className="font-semibold text-base ml-6 mb-2 space-x-2 truncate">{SectionPOI.POI.name}</h4>

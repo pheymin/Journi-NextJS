@@ -46,6 +46,7 @@ export default function Itineraries({ trip_id }: Props) {
         const { data, error } = await supabase
             .from("itinerary")
             .select(`*, trips(types, POI(*))`)
+            .order("itinerary_date")
             .eq("trip_id", trip_id);
 
         if (error) {
@@ -108,7 +109,7 @@ export default function Itineraries({ trip_id }: Props) {
         const itinerary = itineraries.find((i) => i.itinerary_id === itinerary_id);
         if (!itinerary) return;
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from("itinerary")
             .update({ subheading: itinerary.subheading })
             .eq("itinerary_id", itinerary_id);

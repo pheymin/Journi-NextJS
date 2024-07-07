@@ -46,12 +46,11 @@ export default function ItineraryPOI({ itinerary_id, itinerary_index }: Props) {
         fetchItineraryPOIs();
 
         const channel = supabase
-            .channel(`itinerary_poi:${itinerary_id}`)
+            .channel(`itinerary_poi`)
             .on('postgres_changes', {
                 event: '*',
                 schema: 'public',
-                table: 'itinerary_poi',
-                filter: `itinerary_id=eq.${itinerary_id}`
+                table: 'itinerary_poi'
             }, () => {
                 fetchItineraryPOIs();
             })
@@ -99,8 +98,8 @@ export default function ItineraryPOI({ itinerary_id, itinerary_index }: Props) {
     return (
         <div>
             {POIs.sort((a, b) => a.sequence_num - b.sequence_num).map((SectionPOI: ItineraryPOI, index: number) => (
-                <div className="grid grid-cols-12 gap-4 mb-4">
-                    <div key={index} className="col-span-12">
+                <div key={index} className="grid grid-cols-12 gap-4 mb-4">
+                    <div className="col-span-12">
                         <div className="grid grid-cols-12 gap-2 max-h-[150px]">
                             {POIs.length > 1 &&
                                 <div className="col-span-1 h-full flex flex-col justify-center">
@@ -113,7 +112,7 @@ export default function ItineraryPOI({ itinerary_id, itinerary_index }: Props) {
                             <div className={`${POIs.length > 1 ? 'col-span-6' : 'col-span-7'} h-full flex flex-col`}>
                                 <div className="flex shrink-0 space-x-1 grow-0 items-center">
                                     <div className="relative">
-                                        <FontAwesomeIcon icon={faLocationPin} className={`size-7 fill-[${itinerary_color}] text-[${itinerary_color}]`} />
+                                        <FontAwesomeIcon icon={faLocationPin} className={`size-7`} style={{ color: itinerary_color }} />
                                         <span className="absolute top-3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#0c1f19] font-bold">{SectionPOI.sequence_num}</span>
                                     </div>
                                     <h4 className="font-semibold text-base ml-6 mb-2 space-x-2 truncate">{SectionPOI.POI.name}</h4>

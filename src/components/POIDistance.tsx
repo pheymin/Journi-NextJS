@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useGoogleMapsLoader } from "@/utils/googleMapsLoader";
-import { CarFront, Footprints, TrainFront, Bike, Route, ChevronDown } from 'lucide-react';
+import { CarFront, Footprints, TrainFront, Bike, Route } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type TravelMode = 'DRIVING' | 'WALKING' | 'BICYCLING' | 'TRANSIT';
@@ -29,7 +29,6 @@ export default function POIDistance({ origin, destination, initialTravelMode = '
             },
             (response, status) => {
                 if (status === google.maps.DistanceMatrixStatus.OK) {
-                    console.log(response);
                     setDistance(response?.rows[0].elements[0]);
                 }
             }
