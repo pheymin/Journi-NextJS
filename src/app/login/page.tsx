@@ -118,8 +118,8 @@ export default function Login() {
 							</SubmitButton>
 							<div className="divider">or continue with</div>
 							<div className='flex flex-row space-x-2 w-full'>
-								<Button onClick={() => handleLoginWithOAuth("google")} variant="outline" className="w-full g_id_signin"><FontAwesomeIcon icon={faGoogle} className='mx-2 w-3' />Google</Button>
-								<Button onClick={() => handleLoginWithOAuth("facebook")} variant="outline" className="w-full"><FontAwesomeIcon icon={faFacebookF} className='mx-2 w-3' />Facebook</Button>
+								<Button type='button' onClick={() => handleLoginWithOAuth("google")} variant="outline" className="w-full g_id_signin"><FontAwesomeIcon icon={faGoogle} className='mx-2 w-3'/>Google</Button>
+								<Button type='button' onClick={() => handleLoginWithOAuth("facebook")} variant="outline" className="w-full"><FontAwesomeIcon icon={faFacebookF} className='mx-2 w-3'/>Facebook</Button>
 							</div>
 						</CardFooter>
 					</form>

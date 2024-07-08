@@ -425,7 +425,7 @@ export default function NewTripDialog() {
                                     name="status"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Email</FormLabel>
+                                            <FormLabel>Privacy Status</FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <SelectTrigger className="w-[180px]">
                                                     <SelectValue placeholder="Select a status" />

@@ -103,15 +103,15 @@ export default function SectionPOI({ section_id, section_index }: Props) {
                         {POIs.length > 1 &&
                             <div className="col-span-1 h-full flex flex-col justify-center">
                                 {SectionPOI.sequence_num !== 1 &&
-                                    <ChevronUpIcon className="p-2 size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleReorderPOI(SectionPOI.section_poi_id, -1)} />}
+                                    <ChevronUpIcon className="p-0 md:p-2 size-6 md:size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleReorderPOI(SectionPOI.section_poi_id, -1)} />}
                                 {SectionPOI.sequence_num !== POIs.reduce((max, poi) => poi.sequence_num > max ? poi.sequence_num : max, 0) &&
-                                    <ChevronDownIcon className="p-2 size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleReorderPOI(SectionPOI.section_poi_id, 1)} />}
+                                    <ChevronDownIcon className="p-0 md:p-2 size-6 md:size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleReorderPOI(SectionPOI.section_poi_id, 1)} />}
                             </div>
                         }
                         <div className={`${POIs.length > 1 ? 'col-span-6' : 'col-span-7'} h-full flex flex-col`}>
                             <div className="flex shrink-0 space-x-1 grow-0 items-center">
                                 <div className="relative">
-                                    <FontAwesomeIcon icon={faLocationPin} className={`size-7`} style={{ color: section_color }} />
+                                    <FontAwesomeIcon icon={faLocationPin} className="size-7" style={{ color: section_color }} />
                                     <span className="absolute top-3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#0c1f19] font-bold">{SectionPOI.sequence_num}</span>
                                 </div>
                                 <h4 className="font-semibold text-base ml-6 mb-2 space-x-2 truncate">{SectionPOI.POI.name}</h4>
@@ -121,7 +121,7 @@ export default function SectionPOI({ section_id, section_index }: Props) {
                         <div className="col-span-4 rounded-lg">
                             <img className="rounded-lg object-cover object-center h-36 w-full overflow-hidden" src={SectionPOI.POI.image_url} alt={SectionPOI.POI.name} />
                         </div>
-                        <TrashIcon className="p-2 size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleDeletePOI(SectionPOI.section_poi_id)} />
+                        <TrashIcon className="p-0 md:p-2 size-6 md:size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleDeletePOI(SectionPOI.section_poi_id)} />
                     </div>
                 </div>
             ))}

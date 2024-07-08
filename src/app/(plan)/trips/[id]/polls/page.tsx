@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import AddPollDialog from "./components/AddPollDialog";
-import PollCard from "./components/PollCard";
+import Cards from "./components/Cards";
 import {
     Accordion,
     AccordionContent,
@@ -59,30 +59,12 @@ async function ActivePolls({ trip_id }: { trip_id: string }) {
         return;
     }
 
-    const { data, error } = await supabase
-        .from("polls")
-        .select(`*, profiles(*)`)
-        .eq("status", "Active");
-
-    const activePolls = data?.length;
-
     return (
         <div id="active">
             <div className="flex justify-end">
                 <AddPollDialog trip_id={trip_id} user={user}/>
             </div>
-            {activePolls === 0 ? (
-                <div>
-                    <img src="/polling.svg " alt="No active polls" className="mx-auto w-1/3" />
-                    <p className="text-center">No active polls</p>
-                </div>
-            ) : (
-                <div className="space-y-4">
-                    {data?.map((poll: any, index: number) => (
-                        <PollCard poll={poll} user={user} trip_id={trip_id} isOwner={user.id == poll.profiles.id} key={index} />
-                    ))}
-                </div>
-            )}
+            <Cards user={user} trip_id={trip_id} status="Active" />
         </div>
     );
 }
@@ -96,27 +78,9 @@ async function ClosedPolls({ trip_id }: { trip_id: string }) {
         return;
     }
 
-    const { data, error } = await supabase
-        .from("polls")
-        .select(`*, profiles(*)`)
-        .eq("status", "Closed");
-
-    const closedPolls = data?.length;
-
     return (
         <div id="closed">
-            {closedPolls === 0 ? (
-                <div>
-                    <img src="/polling.svg " alt="No active polls" className="mx-auto w-1/3" />
-                    <p className="text-center">No closed polls</p>
-                </div>
-            ) : (
-                <div className="space-y-4">
-                    {data?.map((poll: any, index: number) => (
-                        <PollCard poll={poll} user={user} trip_id={trip_id} isOwner={user.id == poll.profiles.id} key={index} />
-                    ))}
-                </div>
-            )}
+            <Cards user={user} trip_id={trip_id} status="Closed" />
         </div>
     );
 }

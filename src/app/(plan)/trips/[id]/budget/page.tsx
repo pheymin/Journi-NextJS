@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     return (
         <div className="p-2 md:p-4">
             <div className="w-full h-full space-y-3">
-                <div>
+                <div className="p-2 md:p-0">
                     <h3 className="font-semibold text-xl leading-none tracking-tight mb-2">Budget</h3>
                     <p className="text-sm text-muted-foreground">Track your expenses and budget for your trip.</p>
                 </div>

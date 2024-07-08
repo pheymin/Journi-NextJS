@@ -50,7 +50,7 @@ export default function Expenses({ trip_id, user_id }: { trip_id: string, user_i
                 filter: `trip_id = eq.${trip_id}`,
             }, () => {
                 fetchExpenses();
-            });
+            }).subscribe();
 
         return () => {
             expensesChannel.unsubscribe();
@@ -92,7 +92,7 @@ export default function Expenses({ trip_id, user_id }: { trip_id: string, user_i
     };
 
     return (
-        <div>
+        <div className="p-4">
             <div className="flex justify-between items-center">
                 <h4 className="font-semibold text-2xl leading-none tracking-tight mb-2">Transactions</h4>
                 <AddExpensesDialog trip_id={trip_id} user_id={user_id} />

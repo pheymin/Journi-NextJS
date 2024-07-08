@@ -104,9 +104,9 @@ export default function ItineraryPOI({ itinerary_id, itinerary_index }: Props) {
                             {POIs.length > 1 &&
                                 <div className="col-span-1 h-full flex flex-col justify-center">
                                     {SectionPOI.sequence_num !== 1 &&
-                                        <ChevronUpIcon className="p-2 size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleReorderPOI(SectionPOI.itinerary_poi_id, -1)} />}
+                                        <ChevronUpIcon className="p-0 md:p-2 size-6 md:size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleReorderPOI(SectionPOI.itinerary_poi_id, -1)} />}
                                     {SectionPOI.sequence_num !== POIs.reduce((max, poi) => poi.sequence_num > max ? poi.sequence_num : max, 0) &&
-                                        <ChevronDownIcon className="p-2 size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleReorderPOI(SectionPOI.itinerary_poi_id, 1)} />}
+                                        <ChevronDownIcon className="p-0 md:p-2 size-6 md:size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleReorderPOI(SectionPOI.itinerary_poi_id, 1)} />}
                                 </div>
                             }
                             <div className={`${POIs.length > 1 ? 'col-span-6' : 'col-span-7'} h-full flex flex-col`}>
@@ -122,7 +122,7 @@ export default function ItineraryPOI({ itinerary_id, itinerary_index }: Props) {
                             <div className="col-span-4 rounded-lg">
                                 <img className="rounded-lg object-cover object-center h-36 w-full overflow-hidden" src={SectionPOI.POI.image_url} alt={SectionPOI.POI.name} />
                             </div>
-                            <TrashIcon className="p-2 size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleDeletePOI(SectionPOI.itinerary_poi_id)} />
+                            <TrashIcon className="p-0 md:p-2 size-6 md:size-10 rounded-full hover:bg-muted cursor-pointer" onClick={() => handleDeletePOI(SectionPOI.itinerary_poi_id)} />
                         </div>
                     </div>
                     {POIs.length > 1 && index < POIs.length - 1 && (

@@ -92,7 +92,7 @@ export default function NearbySearch({ place_types, location, onPlaceSelected }:
                     <Carousel className="w-full">
                         <CarouselContent className="-ml-1">
                             {places.map((place, index) => (
-                                <CarouselItem key={index} className="pl-1 basis-1/3">
+                                <CarouselItem key={index} className="pl-1 basis-1/2 md:basis-1/3">
                                     <div className="p-1">
                                         <div className="grid grid-cols-4 gap-2 rounded-lg border-2 items-center">
                                             <img src={place.photos && place.photos.length > 0 ? place.photos[0].getUrl() : "https://epsmolduras.cl/wp-content/uploads/2022/02/imagen-no-disponible01601774755-1.jpg"} alt="placeholder" className="size-12 object-cover rounded-s col-span-1" />

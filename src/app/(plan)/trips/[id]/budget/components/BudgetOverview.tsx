@@ -72,7 +72,7 @@ export default function BudgetOverview({ trip_id }: { trip_id: string }) {
                 filter: `trip_id = eq.${trip_id}`,
             }, () => {
                 fetchBudgetAndExpenses();
-            });
+            }).subscribe();
 
         const expensesChannel = supabase
             .channel(`expenses:trip_id=${trip_id}`)
@@ -83,7 +83,7 @@ export default function BudgetOverview({ trip_id }: { trip_id: string }) {
                 filter: `trip_id = eq.${trip_id}`,
             }, () => {
                 fetchBudgetAndExpenses();
-            });
+            }).subscribe();
 
         return () => {
             budgetChannel.unsubscribe();
@@ -98,7 +98,7 @@ export default function BudgetOverview({ trip_id }: { trip_id: string }) {
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 h-1/5 mb-5">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 h-1/5 mb-5 px-2 md:px-0">
                 <div className="rounded-xl h-full px-6 py-8 space-y-2 border border-[#baff66]">
                     <h3 className="text-[#baff66] font-medium text-2xl">MYR {totalExpenses}</h3>
                     {budget ? (
@@ -131,11 +131,11 @@ export default function BudgetOverview({ trip_id }: { trip_id: string }) {
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-2 grid-cols-1 h-full">
-                        <div className="p-8 h-[500px] rounded-xl">
+                        <div className="p-4 md:p-8 h-[500px] rounded-xl">
+                            <h4 className="text-2xl font-semibold">Summary</h4>
                             <PieChart trip_id={trip_id} />
                         </div>
-                        <div className="p-8 content-center space-y-4">
-                            <h4 className="text-2xl font-semibold">Summary</h4>
+                        <div className="p-4 md:p-8 content-center space-y-4">
                             <Table>
                                 <TableHeader>
                                     <TableRow>

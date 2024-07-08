@@ -128,8 +128,8 @@ export default function Page() {
                         ))}
                     </>
                 ) : filteredPlans.length === 0 ? (
-                    <div className="col-span-full flex flex-col h-[250px] items-center justify-center space-y-2">
-                         <img src="/polling.svg " alt="No data" className="mx-auto w-1/3" />
+                    <div className="col-span-full flex flex-col items-center justify-center space-y-2">
+                         <img src="/polling.svg " alt="No data" className="mx-auto w-1/2" />
                         <p className="text-lg text-center">No trip plans found</p>
                     </div>
                 ) : (

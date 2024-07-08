@@ -64,7 +64,7 @@ export default function POIDistance({ origin, destination, initialTravelMode = '
                 <>
                     <p className="flex flex-row items-center cursor-pointer hover:underline mr-2" onClick={handleClick}>
                         <Route className="size-4 mr-2"/>
-                        {distance.duration.text} • {distance.distance.text}
+                        {distance?.duration?.text} • {distance?.distance?.text}
                     </p>
                     <Select value={travelMode} onValueChange={handleTravelModeChange}>
                         <SelectTrigger className="w-fit">

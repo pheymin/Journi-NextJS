@@ -54,8 +54,7 @@ export default function Map({ trip_id }: Props) {
                         schema: 'public',
                         table: 'itinerary_poi',
                         filter: `itinerary_id=eq.${itineraryId}`
-                    }, (payload) => {
-                        console.log('section_poi changes', payload);
+                    }, () => {
                         fetchItinerariesPoi();
                     })
                     .subscribe();
