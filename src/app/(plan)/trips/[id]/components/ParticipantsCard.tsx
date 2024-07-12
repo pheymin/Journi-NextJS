@@ -13,7 +13,6 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-
 type Props = {
     trip_id: string;
 };
