@@ -20,6 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
+import { FormattedAmount } from "@/components/FormattedAmount";
 
 export default function Expenses({ trip_id, user_id }: { trip_id: string, user_id: string }) {
     const supabase = supabaseBrowser();
@@ -112,7 +113,7 @@ export default function Expenses({ trip_id, user_id }: { trip_id: string, user_i
                                     <TableRow>
                                         <TableHead className="w-1/6">Category</TableHead>
                                         <TableHead className="w-3/6">Description</TableHead>
-                                        <TableHead className="w-1/6">Amount (MYR)</TableHead>
+                                        <TableHead className="w-1/6">Amount</TableHead>
                                         <TableHead className="w-1/6"></TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -121,7 +122,7 @@ export default function Expenses({ trip_id, user_id }: { trip_id: string, user_i
                                         <TableRow key={index}>
                                             <TableCell>{expense.expenses_category}</TableCell>
                                             <TableCell>{expense.expenses_description}</TableCell>
-                                            <TableCell>{expense.expenses_amount}</TableCell>
+                                            <TableCell><FormattedAmount amount={expense.expenses_amount} /></TableCell>
                                             <TableCell className="text-right">
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger><Button variant='ghost' size="icon"><EllipsisVertical /></Button></DropdownMenuTrigger>
@@ -138,7 +139,7 @@ export default function Expenses({ trip_id, user_id }: { trip_id: string, user_i
                                     <TableRow>
                                         <TableCell colSpan={3}>Total</TableCell>
                                         <TableCell>
-                                            {sortedGroupedExpenses[date].reduce((acc: number, expense: any) => acc + expense.expenses_amount, 0)}
+                                            <FormattedAmount amount={sortedGroupedExpenses[date].reduce((acc: number, expense: any) => acc + expense.expenses_amount, 0)} />
                                         </TableCell>
                                     </TableRow>
                                 </TableFooter>

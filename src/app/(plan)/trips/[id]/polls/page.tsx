@@ -14,11 +14,13 @@ export default async function Page({ params }: { params: { id: string } }) {
     const { count: activeCount, error } = await supabase
         .from("polls")
         .select('*', { count: 'exact', head: true })
+        .eq("trip_id", params.id)
         .eq("status", "Active");
 
     const { count: closedCount, error: closedError } = await supabase
         .from("polls")
         .select('*', { count: 'exact', head: true })
+        .eq("trip_id", params.id)
         .eq("status", "Closed");
 
     return (

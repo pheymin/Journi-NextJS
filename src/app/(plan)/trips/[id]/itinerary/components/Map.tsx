@@ -48,7 +48,7 @@ export default function Map({ trip_id }: Props) {
                 const itineraryId = data[0].itinerary_id;
 
                 const subscription = supabase
-                    .channel(`itinerary_poi:${itineraryId}`)
+                    .channel(`itinerary_poi_map:${itineraryId}`)
                     .on('postgres_changes', {
                         event: '*',
                         schema: 'public',

@@ -48,6 +48,7 @@
     "lucide-react": "^0.379.0",
     "ml-kmeans": "^6.0.0",
     "next": "latest",
+    "next-intl": "^3.16.0",
     "postcss": "8.4.33",
     "react": "18.2.0",
     "react-day-picker": "^8.10.1",

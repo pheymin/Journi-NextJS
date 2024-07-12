@@ -48,14 +48,13 @@ export default function Map({ trip_id }: Props) {
                 const sectionId = data[0].section_id;
 
                 const subscription = supabase
-                    .channel(`section_poi:${sectionId}`)
+                    .channel(`section_poi_map:${sectionId}`)
                     .on('postgres_changes', {
                         event: '*',
                         schema: 'public',
                         table: 'section_poi',
                         filter: `section_id=eq.${sectionId}`
-                    }, (payload) => {
-                        console.log('section_poi changes', payload);
+                    }, () => {
                         fetchSectionsPoi();
                     })
                     .subscribe();

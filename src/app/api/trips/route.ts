@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    const { place_id, place_name, types, dates, status, tripmates = [] } = await request.json();
+    const { place_id, place_name, types, dates, tripmates = [] } = await request.json();
 
     const title = `Trip to ${place_name}`;
     if (!user) {
@@ -57,7 +57,6 @@ export async function POST(request: Request) {
             description: null,
             place_name,
             types,
-            status,
             user_id: user.id,
             place_id
         }]).select();

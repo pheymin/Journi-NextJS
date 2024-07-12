@@ -6,6 +6,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import Link from 'next/link';
+import { FormattedAmount } from "@/components/FormattedAmount";
 
 type Props = {
     trip_id: string;
@@ -28,9 +29,9 @@ export default async function ParticipantsCard({ trip_id }: Props) {
             </CardHeader>
             <CardContent>
                 {data ? (
-                    <p className="font-bold text-3xl">MYR {data.budget_amount}</p>
+                    <p className="font-bold text-3xl"><FormattedAmount amount={data.budget_amount} /></p>
                 ) : (
-                    <p className="font-bold text-3xl">MYR 0</p>
+                    <p className="font-bold text-3xl"><FormattedAmount amount={0} /></p>
                 )}
                 <Link href={`/trips/${trip_id}/budget`} className="text-blue-500">
                     View details

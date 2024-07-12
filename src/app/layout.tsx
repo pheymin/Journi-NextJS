@@ -3,7 +3,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
-import AuthButton from '@/components/AuthButton';
+import { CurrencyProvider } from "@/components/CurrencyContext";
 
 const APP_NAME = "Journi";
 const APP_DEFAULT_TITLE = "Journi";
@@ -65,7 +65,9 @@ export default function RootLayout({
 		<html lang="en" className="dark">
 			<body className={cn("min-h-screen bg-background font-sans antialiased text-foreground", fontSans.variable)}>
 				<main className="min-h-screen flex flex-col items-center">
-					{children}
+					<CurrencyProvider>
+						{children}
+					</CurrencyProvider>
 				</main>
 				<Toaster />
 			</body>

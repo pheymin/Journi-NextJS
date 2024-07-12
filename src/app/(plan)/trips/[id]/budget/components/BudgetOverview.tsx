@@ -13,6 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { FormattedAmount } from "@/components/FormattedAmount";
 
 export default function BudgetOverview({ trip_id }: { trip_id: string }) {
     const supabase = supabaseBrowser();
@@ -100,11 +101,12 @@ export default function BudgetOverview({ trip_id }: { trip_id: string }) {
         <>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 h-1/5 mb-5 px-2 md:px-0">
                 <div className="rounded-xl h-full px-6 py-8 space-y-2 border border-[#baff66]">
-                    <h3 className="text-[#baff66] font-medium text-2xl">MYR {totalExpenses}</h3>
+                    <h3 className="text-[#baff66] font-medium text-2xl">
+                        <FormattedAmount amount={totalExpenses} /></h3>
                     {budget ? (
                         <>
                             <Progress value={progress} />
-                            <p className="text-[#baff66] text-xs text-right">Budget: MYR {budgetAmount}</p>
+                            <p className="text-[#baff66] text-xs text-right">Budget: <FormattedAmount amount={budgetAmount} /></p>
                         </>
                     ) : (
                         <AddBudgetDialog trip_id={trip_id} />
@@ -112,15 +114,15 @@ export default function BudgetOverview({ trip_id }: { trip_id: string }) {
                 </div>
                 <div className="rounded-xl h-full px-6 py-8 space-y-2 bg-[#0c1f19]">
                     <h3>Budget</h3>
-                    <p className="text-3xl font-medium">MYR {budgetAmount}</p>
+                    <p className="text-3xl font-medium"><FormattedAmount amount={budgetAmount} /></p>
                 </div>
                 <div className="rounded-xl bg-[#baff66] h-full px-6 py-8 space-y-2 text-black">
                     <h3>Balance</h3>
-                    <p className="text-3xl font-medium">MYR {balance}</p>
+                    <p className="text-3xl font-medium"><FormattedAmount amount={balance} /></p>
                 </div>
                 <div className="rounded-xl h-full px-6 py-8 space-y-2 border border-muted-foreground">
                     <h3>Expenses</h3>
-                    <p className="text-3xl font-medium">MYR {totalExpenses}</p>
+                    <p className="text-3xl font-medium"><FormattedAmount amount={totalExpenses} /></p>
                 </div>
             </div>
             <div className="h-full">
@@ -141,7 +143,7 @@ export default function BudgetOverview({ trip_id }: { trip_id: string }) {
                                     <TableRow>
                                         <TableHead>PERCENRAGE</TableHead>
                                         <TableHead>CATEGORY</TableHead>
-                                        <TableHead>TOTAL AMOUNT (MYR)</TableHead>
+                                        <TableHead>TOTAL AMOUNT</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -149,14 +151,14 @@ export default function BudgetOverview({ trip_id }: { trip_id: string }) {
                                         <TableRow key={index}>
                                             <TableCell>{expense.percentage.toFixed(2)}%</TableCell>
                                             <TableCell>{expense.expenses_category}</TableCell>
-                                            <TableCell>{expense.total_expenses}</TableCell>
+                                            <TableCell><FormattedAmount amount={expense.total_expenses} /></TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                                 <TableFooter>
                                     <TableRow>
                                         <TableCell colSpan={2}>Total</TableCell>
-                                        <TableCell>{totalExpenses}</TableCell>
+                                        <TableCell><FormattedAmount amount={totalExpenses} /></TableCell>
                                     </TableRow>
                                 </TableFooter>
                             </Table>

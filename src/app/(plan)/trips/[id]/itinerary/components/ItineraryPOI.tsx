@@ -46,11 +46,12 @@ export default function ItineraryPOI({ itinerary_id, itinerary_index }: Props) {
         fetchItineraryPOIs();
 
         const channel = supabase
-            .channel(`itinerary_poi`)
+            .channel(`itinerary_poi:${itinerary_id}`)
             .on('postgres_changes', {
                 event: '*',
                 schema: 'public',
-                table: 'itinerary_poi'
+                table: 'itinerary_poi',
+                filter: `itinerary_id=eq.${itinerary_id}`
             }, () => {
                 fetchItineraryPOIs();
             })

@@ -67,7 +67,6 @@ const FormSchema = z.object({
         from: z.date({ message: "Please select a date" }),
         to: z.date({ message: "Please select a date" }),
     }),
-    status: z.string({ message: "Please select a status" }),
 });
 
 export default function NewTripDialog() {
@@ -420,29 +419,6 @@ export default function NewTripDialog() {
                                 {!showInviteCombo && (
                                     <Button variant="link" className="text-[#baff66]" onClick={handleInviteComboToggle}>+ Invite tripmates</Button>
                                 )}
-                                <FormField
-                                    control={form.control}
-                                    name="status"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Privacy Status</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                <SelectTrigger className="w-[180px]">
-                                                    <SelectValue placeholder="Select a status" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        <SelectLabel>Privacy Status</SelectLabel>
-                                                        <SelectItem value="Friends">Friends</SelectItem>
-                                                        <SelectItem value="Public">Public</SelectItem>
-                                                        <SelectItem value="Private">Private</SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
                             </div>
                             <LoadingButton loading={loading} type="submit" className="bg-[#baff66] border py-2 text-black mb-2 hover:text-[#baff66] hover:bg-[#0c1f19] hover:border-[#baff66] px-6">
                                 Submit
