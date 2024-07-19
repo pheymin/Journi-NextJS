@@ -301,7 +301,6 @@ export default function NewTripDialog() {
                                     name="place_id"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Where to?</FormLabel>
                                             <FormControl>
                                                 <Input {...field} type="hidden" />
                                             </FormControl>
