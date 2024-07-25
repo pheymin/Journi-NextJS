@@ -64,7 +64,7 @@ export default function RouteOptimize({ trip_id }: { trip_id: string }) {
 
     const optimizedRoute = async () => {
         if (!data) return;
-        console.log(data);
+
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/route_optimize`, {
             method: 'POST',
             headers: {
@@ -74,7 +74,7 @@ export default function RouteOptimize({ trip_id }: { trip_id: string }) {
         });
 
         const result = await res.json();
-        console.log("json", result);
+        console.log(result);
         setResult(result);
     };
 

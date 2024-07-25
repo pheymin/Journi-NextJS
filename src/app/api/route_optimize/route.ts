@@ -54,18 +54,17 @@ export async function POST(request: Request) {
 
             // Update itinerary_poi entries
             const optimizedPois = optimized.routes[i].optimized.pois;
-            for (let j = 0; j < optimizedPois.length; j++) {
-                const poi = optimizedPois[j];
-                const { error: poiError } = await supabase
-                    .from('itinerary_poi')
-                    .upsert({
-                        itinerary_id: itineraryId,
-                        place_id: poi.place_id,
-                        sequence_num: j + 1,
-                    });
+            const upsertData = optimizedPois.map((poi, j) => ({
+                itinerary_id: itineraryId,
+                place_id: poi.place_id,
+                sequence_num: j + 1,
+            }));
 
-                if (poiError) throw poiError;
-            }
+            const { error: poiError } = await supabase
+                .from('itinerary_poi')
+                .upsert(upsertData);
+
+            if (poiError) throw poiError;
         }
 
         // Return the optimized route summary
