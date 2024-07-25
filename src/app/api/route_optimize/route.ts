@@ -3,11 +3,14 @@ import { optimizeRoutes } from '@/utils/algorithm/routeOptimizationService';
 
 export async function POST(request: Request) {
     const supabase = createClient();
+    console.time('route_optimize');
     try {
         const body = await request.json();
         const { pois, numDays, trip_id } = body;
 
+        console.time('optimizeRoutes');
         const optimized = optimizeRoutes(pois, numDays);
+        console.timeEnd('optimizeRoutes');
         //rearrange the pois based on the optimized route and store to the database
         //get the trip start and end date from the trip table first
         const { data: trip, error: tripError } = await supabase
@@ -67,6 +70,7 @@ export async function POST(request: Request) {
             if (poiError) throw poiError;
         }
 
+        console.timeEnd('route_optimize');
         // Return the optimized route summary
         return new Response(JSON.stringify({
             initial: optimized.initial,
@@ -75,6 +79,7 @@ export async function POST(request: Request) {
     }
     catch (error) {
         console.error(error);
+        console.timeEnd('route_optimize');
         return new Response(JSON.stringify({ error }), { status: 500 });
     }
 }

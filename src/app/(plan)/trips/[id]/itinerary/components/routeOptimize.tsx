@@ -64,18 +64,36 @@ export default function RouteOptimize({ trip_id }: { trip_id: string }) {
 
     const optimizedRoute = async () => {
         if (!data) return;
-
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/route_optimize`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-
-        const result = await res.json();
-        console.log(result);
-        setResult(result);
+        
+        const maxRetries = 3;
+        let retries = 0;
+        
+        while (retries < maxRetries) {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/route_optimize`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                
+                const result = await res.json();
+                console.log(result);
+                setResult(result);
+                return;
+            } catch (error) {
+                console.error(`Attempt ${retries + 1} failed:`, error);
+                retries++;
+                if (retries === maxRetries) {
+                    setError(`Failed to optimize route after ${maxRetries} attempts`);
+                }
+                // Wait before retrying (optional)
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
     };
 
     if (error) {
