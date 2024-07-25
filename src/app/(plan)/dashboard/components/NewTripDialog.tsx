@@ -304,7 +304,6 @@ export default function NewTripDialog() {
                                             <FormControl>
                                                 <Input {...field} type="hidden" />
                                             </FormControl>
-                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />

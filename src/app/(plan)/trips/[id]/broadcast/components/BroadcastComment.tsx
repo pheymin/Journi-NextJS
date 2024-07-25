@@ -60,7 +60,7 @@ export default async function BroadcastComment({ broadcast, user }: Props) {
                 <AccordionContent>
                     <div className="space-y-6">
                         <form className="flex space-x-2">
-                            <Input type="text" name="comment" placeholder="Write a comment" className="w-full" />
+                            <Input type="text" name="comment" placeholder="Write a comment" className="w-full" required/>
                             <SubmitButton
                                 formAction={postComment}
                                 className="w-fit rounded-md px-4 py-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80"
