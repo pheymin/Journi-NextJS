@@ -9,16 +9,14 @@ type AddPOIProps = {
 };
 
 export default function AddPOI({ onPlaceSelected }: AddPOIProps) {
-    //maps autocomplete
+    const [inputValue, setInputValue] = useState("");
     const [autoComplete, setAutoComplete] = useState<google.maps.places.Autocomplete | null>(null);
     const { isLoaded, loadError } = useGoogleMapsLoader();
     const placeAutoComplete = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (isLoaded && placeAutoComplete.current) {
-            //create the autocomplete
             const gautoComplete = new google.maps.places.Autocomplete(placeAutoComplete.current as HTMLInputElement, {
-                // bounds: defaultBounds,
                 fields: ['place_id', 'name', 'geometry', 'formatted_address', 'opening_hours', 'photos', 'rating', 'types', 'url'],
             });
             setAutoComplete(gautoComplete);
@@ -37,11 +35,11 @@ export default function AddPOI({ onPlaceSelected }: AddPOIProps) {
                     const storePlace = await storePlaceDetails(place);
                     if (storePlace) {
                         onPlaceSelected(place.place_id);
+                        setInputValue(""); // Clear the input field
                     }
                 }
             });
 
-            // Cleanup listener on component unmount
             return () => {
                 google.maps.event.clearInstanceListeners(autoComplete);
             };
@@ -75,6 +73,8 @@ export default function AddPOI({ onPlaceSelected }: AddPOIProps) {
                 ref={placeAutoComplete}
                 placeholder="Add a place"
                 required
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
             />
         </div>
     );

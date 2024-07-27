@@ -91,7 +91,10 @@ export default function AddBudgetDialog({ trip_id }: { trip_id: string}) {
 type BudgetFormProps = React.ComponentProps<'form'>  & { trip_id: string };
 
 const FormSchema = z.object({
-    budget: z.preprocess((value) => Number(value), z.number().int().positive().min(1)),
+    budget: z.preprocess(
+        (value) => Number(value),
+        z.number().int().positive().min(1).max(1000000)
+    ),
 });
 
 const BudgetForm: React.FC<BudgetFormProps> = ({ className, trip_id }) => {

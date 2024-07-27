@@ -1,4 +1,5 @@
-import { createClient } from "@/utils/supabase/server";
+"use client"
+import { supabaseBrowser } from "@/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from 'date-fns';
 import BroadcastAction from "./BroadcastAction";
@@ -34,10 +35,10 @@ type Props = {
     user: User;
 };
 
-export default async function BroadcastCard({ broadcast, user }: Props) {
+export default function BroadcastCard({ broadcast, user }: Props) {
+    const supabase = supabaseBrowser();
+
     const deleteBroadcast = async () => {
-        "use server";
-        const supabase = createClient();
         const { error } = await supabase
             .from("broadcast")
             .delete()

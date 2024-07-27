@@ -103,7 +103,7 @@ export default function AddExpensesDialog({ trip_id, user_id }: { trip_id: strin
 type ExpensesFormProps = React.ComponentProps<'form'> & { trip_id: string } & { user_id: string };
 
 const FormSchema = z.object({
-    expenses: z.preprocess((value) => Number(value), z.number().int().positive().min(1)),
+    expenses: z.preprocess((value) => Number(value), z.number().int().positive().min(1).max(1000000)),
     category: z.string({ message: "Please select a category" }),
     description: z.string().optional(),
     date: z.date({ message: "Please select a date" }),

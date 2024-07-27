@@ -1,13 +1,15 @@
+"use client"
+import { supabaseBrowser } from "@/utils/supabase/client";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { createClient } from "@/utils/supabase/server";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input"
 import Comments from "./Comments";
+import { useRef } from "react";
 
 type Broadcast = {
     broadcast_id: string;
@@ -32,12 +34,15 @@ type Props = {
     user: User;
 };
 
-export default async function BroadcastComment({ broadcast, user }: Props) {
-    //submits a comment
+export default function BroadcastComment({ broadcast, user }: Props) {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    // Submits a comment
     const postComment = async (formData: FormData) => {
-        "use server";
-        const supabase = createClient();
+        const supabase = supabaseBrowser();
         const comment = formData.get("comment") as string;
+
+        if (!comment.trim()) return; // Don't submit empty comments
 
         const { error } = await supabase
             .from("broadcast_comment")
@@ -51,6 +56,11 @@ export default async function BroadcastComment({ broadcast, user }: Props) {
             console.error("Error posting comment", error);
             return;
         }
+
+        // Clear the input field
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
     };
 
     return (
@@ -60,7 +70,14 @@ export default async function BroadcastComment({ broadcast, user }: Props) {
                 <AccordionContent>
                     <div className="space-y-6">
                         <form className="flex space-x-2">
-                            <Input type="text" name="comment" placeholder="Write a comment" className="w-full" required/>
+                            <Input 
+                                ref={inputRef}
+                                type="text" 
+                                name="comment" 
+                                placeholder="Write a comment" 
+                                className="w-full" 
+                                required
+                            />
                             <SubmitButton
                                 formAction={postComment}
                                 className="w-fit rounded-md px-4 py-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80"

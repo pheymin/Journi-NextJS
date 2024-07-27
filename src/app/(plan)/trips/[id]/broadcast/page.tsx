@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import AddBroadcastDialog from "./components/AddBroadcastDialog";
-import BroadcastCard from "./components/BroadcastCard";
+import BroadcastList from "./components/BroadcastList";
 
 export default async function Page({ params }: { params: { id: string } }) {
     const supabase = createClient();
@@ -10,13 +10,6 @@ export default async function Page({ params }: { params: { id: string } }) {
         console.error("User not authenticated");
         return;
     }
-
-    //join user with profile
-    const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
 
     const { data, error } = await supabase
         .from("profiles")
@@ -52,9 +45,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            {broadcasts?.map((broadcast: any, index: number) => (
-                                <BroadcastCard key={index} broadcast={broadcast} user={profile} />
-                            ))}
+                            <BroadcastList user={data} trip_id={params.id} />
                         </div>
                     )}
                 </div>
