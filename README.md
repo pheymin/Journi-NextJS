@@ -1,93 +1,141 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
-
+# Journi - NextJS - Supabase
+<!-- PROJECT LOGO -->
+<br />
 <p align="center">
- The fastest way to build apps with Next.js and Supabase
+  <a href="https://github.com/pheymin/Journi-NextJS.git">
+    <img src="https://github.com/pheymin/Journi-NextJS/blob/master/public/android-chrome-192x192.png" alt="Logo" width="80" height="80">
+  </a>
+
+<h3 align="center">Journi - Personalized Trip Planning Web App</h3>
+
+  <p align="center">
+    Personalized Trip Planning Web Application
+  </p>
 </p>
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Use Case Diagram](#use-case-diagram)
+- [Tech Stack](#tech-stack)
+- [Installation & Setup](#installation--setup)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Scripts](#scripts)
+- [Usage](#usage)
+- [License](#license)
+- [Authors](#authors)
+
+---
+
+## Project Overview
+**Journi** is a tourism trip planning platform developed using Next.js, Supabase, K-Means, and Simulated Annealing algorithms, aimed at providing personalized itineraries for tourists. The platform centralizes trip planning processes and allows for real-time collaboration among users. It offers both pre-trip and on-trip planning phases, enabling users to define trip details, manage destinations, and optimize routes. Additionally, it facilitates collaboration with travel partners and allows budget tracking during trips.
 
 ## Features
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+### User Management
+- **User Profiles**: Create and manage user profiles with options to log in, update profiles, and manage account settings.
+  
+### Trip Planning
+- **Trip Details**: Define trip dates, travel preferences, and search for destinations.
+- **Itinerary Creation**: Create custom itineraries with optimized routes using K-Means and Simulated Annealing algorithms.
+  
+### POI (Points of Interest) Management
+- **POI Discovery**: Search, discover, and add Points of Interest (POIs) to itineraries.
+- **POI Management**: Easily manage and customize POIs within an itinerary.
 
-## Demo
+### Collaboration Features
+- **Invite Travel Companions**: Share trip itineraries with travel companions and invite them to collaborate.
+- **Real-Time Collaboration**: Plan trips collaboratively with features such as polls, broadcasts, and shared itineraries.
+- **Broadcast Messages**: Send broadcasts to notify trip participants of important updates in real-time.
+  
+### Budget Tracking
+- **Set a Budget**: Define a travel budget for the trip.
+- **Monitor Expenses**: Track and manage expenses throughout the trip.
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+## Screenshots
 
-## Deploy to Vercel
+- **Landing Page (Dashboard)**: Displays an overview of trips and events.
+![Picture1](https://github.com/user-attachments/assets/e1268b6f-ea71-46f4-9c27-5bf0b46d7171)
 
-Vercel deployment will guide you through creating a Supabase account and project.
+- **Itinerary Plan Page**: Provides an interface for users to create and manage their itineraries.
+![Picture1](https://github.com/user-attachments/assets/842a977a-eb20-4838-a9a0-87b0ffd8d086)
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+- **Polls**: Allows users to create polls and gather input from travel companions on trip-related decisions.
+![Picture6](https://github.com/user-attachments/assets/153f2b70-fd60-4aef-820e-bb7eac253677)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This%20starter%20configures%20Supabase%20Auth%20to%20use%20cookies%2C%20making%20the%20user's%20session%20available%20throughout%20the%20entire%20Next.js%20app%20-%20Client%20Components%2C%20Server%20Components%2C%20Route%20Handlers%2C%20Server%20Actions%20and%20Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6)
+- **Broadcasting**: Real-time communication with trip participants to share updates.
+![Picture7](https://github.com/user-attachments/assets/9d2b5b1f-5aba-4ad3-9142-717a12277cf0)
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+- **Budgeting**: Enables users to set budgets and track their travel expenses throughout the trip.
+![Picture8](https://github.com/user-attachments/assets/8a553729-ef4c-4c05-ae38-cba13d50fb17)
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
 
-## Clone and run locally
+## Use Case Diagram
+![Picture1](https://github.com/user-attachments/assets/aad1da0d-7fcf-4211-89b9-2d7473a98ef3)
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+## Tech Stack
 
-2. Create a Next.js app using the Supabase Starter template npx command
+- **Frontend**: Next.js, React, TailwindCSS, ShadCN
+- **Backend**: Supabase (for authentication and database management)
+- **Cloud**: Supabase (for real-time data sync and storage)
+- **Algorithms**: K-Means (clustering for POIs), Simulated Annealing (route optimization)
+- **APIs**: Google Maps API (for mapping and route management)
 
+## Installation & Setup
+
+### Prerequisites
+- **Node.js** (v18 or higher)
+- **Supabase Project** (for real-time database and authentication)
+- **Google Maps API Key** (for POI management and routing)
+
+### Installation
+
+1. Clone the repository:
    ```bash
-   npx create-next-app -e with-supabase
+   git clone https://github.com/your-repo/journi-trip-planning.git
    ```
-
-3. Use `cd` to change into the app's directory
-
+2. Install dependencies:
    ```bash
-   cd name-of-new-app
+   npm install
    ```
-
-4. Rename `.env.local.example` to `.env.local` and update the following:
-
+3. Create a `.env` file and add your environment variables:
+   - Supabase credentials
+   - Google Maps API Key
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-key>
+   NEXT_PUBLIC_BASE_API_URL=<your-app-api-url>
+   NEXT_PUBLIC_MAPS_API_KEY=<your-google-maps-api-key>
+   RESEND_API_KEY=<your-resend-api-key>
+   NEXT_PUBLIC_MAP_ID=<your--google-map-id>
    ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
-
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
-
-5. You can now run the Next.js local development server:
-
+4. Run the development server:
    ```bash
    npm run dev
    ```
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+5. Open your browser and navigate to `http://localhost:3000` to view the application.
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+## Scripts
 
-## Feedback and issues
+- **`npm run dev`**: Starts the development server.
+- **`npm run build`**: Builds the application for production.
+- **`npm run start`**: Starts the production server.
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+## Usage
 
-## More Supabase examples
+A demo video showcasing Journi’s main features including trip planning, itinerary management, real-time collaboration, and budgeting will be available below:
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+[![Picture1](https://github.com/user-attachments/assets/c48b078a-5d41-4cd0-80cc-5326dcda47be)](https://youtu.be/kQv5LFzbhLM)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
+
+## Authors
+
+Pheymin - [pheymin1223@gmail.com](pheymin1223@gmail.com) - https://github.com/pheymin
+
+---
